@@ -6,65 +6,69 @@ contract Main {
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
   int creditPerUnitOfCharge = 1;
   int weiPerUnitOfCharge = 1000;
-  address masterAccess;
+  int weiPerCredit = 1000;
+  mapping (address => bool) private masterAccess;
 
-  /*
-  Keeps track of credits of approved regulated parties
-  (utility companies and fossil fuel generators)
-  */
-  mapping (address => int) credits;
+  /* Keeps track of credits of approved regulated parties
+  (utility companies and fossil fuel generators) */
+  mapping (address => int) private credits;
 
-  /*
-  Keeps track of balances in wei of vehicle owners
-  */
-  mapping (address => int) balances;
+  /* Keeps track of balances in dollar of vehicle owners */
+  mapping (address => int) private balances;
 
-  /*
-  Keeps track of authorized government actors who can
-  mark credits are "redeemed", subtracting from credits.
-  */
-  mapping (address => bool) authorizedTaxGovActors;
+  /* Maps user address to utility company address */
+  mapping (address => address) private utilityCompanyOfUser;
 
-  /*
-  Keeps track of authorized government actors who can change
-  the conversion rates.
-  */
-  mapping (address => bool) authorizedGovActors;
+  /* Keeps track of balances in wei of utility companies
+  and fossil fuel generators */
+  mapping (address => int) private etherBalances;
 
-  /*
-  NEED TO DISCUSS ACCESS CONTROL!!!!!!!!!!!!!!!!!!!!!!!!!!
-  */
+  mapping (address => bool) private authorizedToVerify;
+  mapping (address => bool) private authorizedToRedeem;
+  mapping (address => bool) private authorizedToChangeRates;
+  mapping (address => bool) private authorizedToViewUserData;
+  mapping (address => bool) private authorizedToUpdateAccess;
+  mapping (address => bool) private authorizedToUpdateUserData;
+  mapping (address => bool) private authorizedOracle;
 
-  modifier isAuthorized(mapping (address => bool) list) {
+  /* modifier to only allow function calls if caller is authorized in list */
+  modifier _is(mapping (address => bool) list) {
     require(list[msg.sender] == true);
     _;
   }
 
   /* Constructor function */
   function Main() public {
-    master_access = msg.sender;
+    master_access[msg.sender] = true;
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  *  ====================CHANGE VARIABLES/ACCESS====================
+  *  =================CHANGE VARIABLES W/ ACCESS====================
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
   function changeCreditRate(int newCreditRate) public
-    isAuthorized(authorizedGovActors) {
+    _is(authorizedToChangeRates) {
     creditPerUnitOfCharge = new_credit_rate;
   }
 
-  function changeWeiRate(int newWeiRate) public
-    isAuthorized(authorizedGovActors) {
+  function changeUnitRate(int newWeiRate) public
+    _is(authorizedToChangeRates) {
     weiPerUnitOfCharge = new_wei_rate;
+  }
+
+  function changeCreditPrice(int newPrice) public
+    _is(authorizedToChangeRates) {
+    weiPerCredit = new_wei_rate;
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   *  ============CREDIT CREATION (FROM ENERGY TO CREDIT)============
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-  function chargeCompleted(int amount) public {
-
+  function chargeCompleted(int amountInUnit, address owner)
+    public _is(authorizedOracle){
+    balances[owner] += amountInUnit * weiPerUnitOfCharge;
+    credits[utilityCompanyOfUser[owner]] += amountInUnit * creditPerUnitOfCharge;
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
