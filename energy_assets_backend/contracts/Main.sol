@@ -22,9 +22,7 @@ contract Main {
   /* Maps user address to utility company address */
   mapping (address => address) private utilityCompanyOfUser;
 
-  mapping (address => bool) private verifiedUsers;
-  mapping (address => bool) private verifiedUtilityCompanies;
-  mapping (address => bool) private verifiedFFGenerators;
+  mapping (address => int8) private addressType;
 
   mapping (address => bool) private masterAccess;
   mapping (address => bool) private authorizedToVerify;
@@ -53,26 +51,32 @@ contract Main {
 
   function userRegistration(address accountAddress, address utilityCompany) public
     _is(masterAccess) returns (bool) {
-    if (verifiedUtilityCompanies[utilityCompany] == false) {
+    if (addressType[utilityCompany] != 2) {
       return false;
     }
-    verifiedUsers[accountAddress] = true;
+    addressType[accountAddress] = 1;
     utilityCompanyOfUser[accountAddress] = utilityCompany;
     return true;
   }
 
   /* Types of Acccount:
-  1: Utility Companies
-  2: Fossil Fuel Generators
-  This function has to be called by an internal account
-  who has masterAccess after verifying account type*/
+  0: Unverified
+  1: Users (Vehicle Owners)
+  2: Utility Companies
+  3: Fossil Fuel Generators
+  This function has to be called by an master account
+  who has masterAccess !!!after verifying account type!!!
+  (possibly from an oracle) */
   function registration(address accountAddress, int typeOfAccount) public
     _is(masterAccess) returns (bool){
-    if (typeOfAccount == 1) {
-      verifiedUtilityCompanies[accountAddress] = true;
-    } else if (typeOfAccount == 2) {
-      verifiedFFGenerators[accountAddress] = true;
+    if (typeOfAccount == 2) {
+      addressType[accountAddress] = 2;
+    } else if (typeOfAccount == 3) {
+      addressType[accountAddress] = 3;
+    } else {
+      return false;
     }
+    return true;
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -130,6 +134,10 @@ contract Main {
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   *  ========================GETTER FUNCTIONS=======================
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+  /* Because mappings are not iterable, it might be necessary to
+  keep a list of account addresses on a server. The type of each address
+  can be acquired from mapping addressType[] */
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   *  =========================CHANGE ACCESS=========================
