@@ -36,7 +36,7 @@ contract Main {
   /* modifier to only allow function calls if caller is authorized in list */
   modifier _is(mapping (address => bool) list) {
     require(list[msg.sender] == true
-    || masterAccess[msg.sender == true]);
+    || masterAccess[msg.sender] == true);
     _;
   }
 
@@ -102,8 +102,7 @@ contract Main {
   *  ============CREDIT CREATION (FROM ENERGY TO CREDIT)============
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-  function chargeCompleted(int amountInUnit, address owner)
-    public _is(authorizedOracle){
+  function chargeCompleted(int amountInUnit, address owner) public _is(authorizedOracle) {
     balances[owner] += amountInUnit * weiPerUnitOfCharge;
     credits[utilityCompanyOfUser[owner]] += amountInUnit * creditPerUnitOfCharge;
   }

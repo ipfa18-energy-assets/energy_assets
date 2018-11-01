@@ -6,8 +6,8 @@ contract('Greeter', function(accounts) {
     return Greeter.deployed()
       .then(function(instance) {
         /* CALL the greet function */
-        instance.greeter("test greeting");
-        return instance.greet.call();
+        instance.greeter();
+        return instance.addCertificates.call(10);
       })
       .then(function(result) {
         assert.equal(args._greeting, result, "greeting should match constructor argument")
