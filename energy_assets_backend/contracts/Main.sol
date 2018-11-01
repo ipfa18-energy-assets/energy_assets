@@ -1,12 +1,12 @@
-pragma solidity ^0.4.25;
+pragma solidity ^0.4.24;
 contract Main {
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   *  ==============================INIT=============================
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-  int creditPerUnitOfCharge = 1;
-  int weiPerUnitOfCharge = 1000;
-  int weiPerCredit = 1000;
+  uint creditPerUnitOfCharge = 1;
+  uint weiPerUnitOfCharge = 1000;
+  uint weiPerCredit = 1000;
 
   /* Keeps track of credits of approved regulated parties
   (utility companies and fossil fuel generators) */
@@ -42,7 +42,7 @@ contract Main {
 
   /* Constructor function */
   function Main() public {
-    master_access[msg.sender] = true;
+    masterAccess[msg.sender] = true;
   }
 
   function() public {
@@ -83,26 +83,26 @@ contract Main {
   *  =================CHANGE VARIABLES W/ ACCESS====================
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-  function changeCreditRate(int newCreditRate) public
+  function changeCreditRate(uint newCreditRate) public
     _is(authorizedToChangeRates) {
-    creditPerUnitOfCharge = new_credit_rate;
+    creditPerUnitOfCharge = newCreditRate;
   }
 
-  function changeUnitRate(int newWeiRate) public
+  function changeUnitRate(uint newWeiRate) public
     _is(authorizedToChangeRates) {
-    weiPerUnitOfCharge = new_wei_rate;
+    weiPerUnitOfCharge = newWeiRate;
   }
 
-  function changeCreditPrice(int newPrice) public
+  function changeCreditPrice(uint newPrice) public
     _is(authorizedToChangeRates) {
-    weiPerCredit = new_wei_rate;
+    weiPerCredit = newPrice;
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   *  ============CREDIT CREATION (FROM ENERGY TO CREDIT)============
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-  function chargeCompleted(int amountInUnit, address owner) public _is(authorizedOracle) {
+  function chargeCompleted(uint amountInUnit, address owner) public _is(authorizedOracle) {
     balances[owner] += amountInUnit * weiPerUnitOfCharge;
     credits[utilityCompanyOfUser[owner]] += amountInUnit * creditPerUnitOfCharge;
   }
@@ -110,6 +110,18 @@ contract Main {
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   *  ========================CREDIT TRADING=========================
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+  /* Allows a utility company to put a certain amount of credits for sale. This credit package
+  Should be inserted into an array for polluters to purchase. */
+  function sell_certificates(uint amount) {
+
+  }
+
+  /* Allows a polluter to purchase certificates. Should return the total number of certificates actually allocated.
+  Purchased packages should be removed from the list once purchased. Utilities should be paid. */
+  function buy_certificates (uint amount) returns (uint) {
+
+  }
 
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -122,13 +134,36 @@ contract Main {
   }
 
   function peek_and_verify(address target) public
-    _is(authorizedToVerify) returns (uint){
+    _is(authorizedToVerify) returns (uint) {
 
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   *  ======================WITHDRAWAL/DEPOSIT=======================
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+  /* Allows a user to withdraw funds. User should withdraw funds from there utility companie's bank account.
+  Amount withdrawn should be based on amount of wei credited at time of transatction. */
+  function user_withdraw() public returns (uint) {
+
+  }
+  /* Allows a utility company to withdraw funds */
+  function utility_withdraw() public returns (uint) {
+
+  }
+  /* Allows a polluter to withdraw funds */
+  function polluter_withdraw() public returns (uint) {
+
+  }
+
+  /* Allows a utility company to withdraw funds */
+  function utility_deposit() public returns (uint) {
+
+  }
+  /* Allows a polluter to withdraw funds */
+  function polluter_deposit() public returns (uint) {
+
+  }
+
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   *  ========================GETTER FUNCTIONS=======================
