@@ -28,7 +28,7 @@ contract Main {
   on the list**, then the amount they want to sell is added to their
   amountForSale.
   */
-  mapping(address => uint) private amountForSale
+  mapping(address => uint) private amountForSale;
   address[] sellers;
 
   /* Types of Acccount:
@@ -36,7 +36,7 @@ contract Main {
   1: Users (Vehicle Owners)
   2: Utility Companies
   3: Fossil Fuel Generators */
-  mapping (address => uint8) private addressType;
+  mapping(address => uint8) private addressType;
 
   /*
   accessList ID:
@@ -65,7 +65,7 @@ contract Main {
 
   /* Constructor function */
   constructor() public {
-    master_access[msg.sender] = true;
+    masterAccess[msg.sender] = true;
   }
 
   function() public {
@@ -109,7 +109,7 @@ contract Main {
 
   function changeCreditRate(uint newCreditRate) public
     _is(authorizedToChangeRates) returns (bool){
-    creditPerUnitOfCharge = new_credit_rate;
+    creditPerUnitOfCharge = newCreditRate;
   }
 
   function changeUnitRate(uint newDollarRate) public
@@ -234,10 +234,10 @@ contract Main {
 
 
   /* Quick overall change of access for a single account */
-  function changeAccess(address addr, bool masterAccess,
-    bool authorizedToVerify, bool authorizedToRedeem,
-    bool authorizedToChangeRates, bool authorizedToViewUserData
-    bool authorizedToUpdateAccess, bool uthorizedOracle) public
+  function changeAccess(address addr, bool master,
+    bool toVerify, bool toRedeem,
+    bool toChangeRates, bool toViewUserData,
+    bool toUpdateAccess, bool oracle) public
     _is(masterAccess) returns (bool) {
     // YOUR CODE HERE
   }
