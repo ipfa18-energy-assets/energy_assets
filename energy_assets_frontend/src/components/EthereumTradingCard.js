@@ -3,25 +3,14 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import { Link } from 'react-router-dom'
 import Slider from 'material-ui-slider-label/Slider';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
-import Popper from '@material-ui/core/Popper';
 import Button from '@material-ui/core/Button';
-import Fade from '@material-ui/core/Fade';
-import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import Grow from '@material-ui/core/Grow';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Dropdown from './Dropdown'
 
 
@@ -69,7 +58,8 @@ const styles = {
   },
   continueButtonWrapper: {
     paddingLeft: "40%",
-    paddingTop: "5%"
+    paddingTop: "5%",
+    paddingBottom: "5%"
   },
   conversion: {
     paddingLeft: "25%",
@@ -102,7 +92,7 @@ class Login extends Component {
 
   render() {
     const { classes } = this.props;
-    const { value, openCoin, openEnergy, coin, energy } = this.state;
+    const { value } = this.state;
 
     return (
       <Card className = {classes.card}>
@@ -151,7 +141,7 @@ class Login extends Component {
                   />
                </FormControl>
               </CardContent>
-              <Dropdown menuItems = {["REC", "DEEZ", "LMNOP"]}/>
+              <Dropdown menuItems = {["REC", "LCFS", "LMNOP"]}/>
           </Card>
           <div className = {classes.continueButtonWrapper}>
             <Button variant="contained" className = {classes.continueButton}>

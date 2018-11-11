@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import EthereumTradingCard from './EthereumTradingCard'
+import { Link } from 'react-router-dom'
 
 
 const styles = {
@@ -18,15 +19,17 @@ const styles = {
     paddingTop: "10px",
     paddingLeft: "200px",
     color: "white",
-    fontFamily: 'Pattaya',
     float: "left"
   },
   signIn: {
     paddingTop: "10px",
     color: "white",
-    fontFamily: 'Pattaya',
     float: "right",
     position: "relative"
+  },
+  signInText: {
+    paddingTop: "10px",
+    color: "white",
   },
   topBox: {
     width: "1300px",// This controls how far right sign in is
@@ -52,10 +55,6 @@ const styles = {
 
 class SplashPage extends Component {
 
-
-    componentWillMount() {
-    }
-
     render() {
 
       const { classes } = this.props
@@ -66,9 +65,11 @@ class SplashPage extends Component {
                   <Typography className = {classes.topText} variant="headline">
                     Changelly
                   </Typography>
-                  <Typography className = {classes.signIn} variant="headline">
-                    Sign In ->
-                  </Typography>
+                  <Button className = {classes.signIn} color="inherit" component={Link} to="/login">
+                    <Typography  className = {classes.signInText} variant="headline">
+                      Sign In ->
+                    </Typography>
+                  </Button>
                 </div>
                 <div className={classes.lowerWrapper}>
                   <div className = {classes.leftLower}>
