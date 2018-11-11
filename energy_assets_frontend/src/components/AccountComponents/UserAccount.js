@@ -63,7 +63,7 @@ class UserAccount extends Component {
     } else if (currentShownComponent === "History") {
       currentState = (<History/>)
     } else {
-      currentState = (<UserProfile/>)
+      currentState = (<UserProfile action={'redeem'}/>)
     }
 
 

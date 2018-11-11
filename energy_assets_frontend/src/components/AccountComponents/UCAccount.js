@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import UserProfile from './Tabs/UserProfile'
-import History from './Tabs/History'
-import RegisterVE from './Tabs/RegisterVE'
+import RegisteredUsers from './Tabs/RegisteredUsers'
 
 
 
@@ -58,10 +57,8 @@ class UCAccount extends Component {
     //   )
     // }
     var currentState;
-    if (currentShownComponent === "RegisterVE") {
-      currentState = (<RegisterVE/>)
-    } else if (currentShownComponent === "History") {
-      currentState = (<History/>)
+    if (currentShownComponent === "RegisteredUsers") {
+      currentState = (<RegisteredUsers action={'redeem'}/>)
     } else {
       currentState = (<UserProfile/>)
     }
@@ -73,11 +70,8 @@ class UCAccount extends Component {
           <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
             Profile
           </Button>
-          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("History")}>
-            History
-          </Button>
-          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("RegisterVE")}>
-            Registered VE
+          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("RegisteredUsers")}>
+            Registered Users
           </Button>
         </div>
         <div>

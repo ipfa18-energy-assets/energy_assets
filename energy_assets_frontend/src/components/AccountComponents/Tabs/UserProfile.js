@@ -45,7 +45,17 @@ class UserProfile extends Component {
 
 
   render() {
-    const { classes } = this.props;
+    const { classes, action } = this.props;
+    let actionButton
+    if (action == "redeem") {
+      actionButton = (<Button variant="contained" className = {classes.button}>
+                        Redeem
+                      </Button>)
+    } else {
+      actionButton = (<Button variant="contained" className = {classes.button}>
+                        Sell
+                      </Button>)
+    }
 
     return (
         <div className = {classes.userProf}>
@@ -91,9 +101,7 @@ class UserProfile extends Component {
           </div>
         <div>
           <div>
-            <Button variant="contained" className = {classes.button}>
-              Redeem
-            </Button>
+            {actionButton}
             <Button variant="contained" className = {classes.button}>
               Home
             </Button>

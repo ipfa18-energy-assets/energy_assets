@@ -65,6 +65,22 @@ class Login extends Component {
 
   render() {
     const { classes } = this.props
+    const { userType } = this.state
+    let signInButton
+
+    if (userType == 'User') {
+      signInButton = (<Button className = {classes.signInButton} color="inherit" component={Link} to="/useraccount">
+            Continue
+            </Button>)
+    } else if (userType == 'UC') {
+      signInButton = (<Button className = {classes.signInButton} color="inherit" component={Link} to="/ucaccount">
+            Continue
+            </Button>)
+    } else {
+      signInButton = (<Button className = {classes.signInButton} color="inherit" component={Link} to="/ffgaccount">
+            Continue
+            </Button>)
+    }
     return (
       <div className={classes.background}>
         <div className = {classes.mainCardWrapper}>
@@ -107,9 +123,7 @@ class Login extends Component {
              </div>
            </div>
             <div className = {classes.signInButtonWrapper}>
-              <Button className = {classes.signInButton} color="inherit" component={Link} to="/useraccount">
-                  Continue
-              </Button>
+              {signInButton}
             </div>
           </Card >
         </div>
