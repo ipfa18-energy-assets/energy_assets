@@ -61,7 +61,6 @@ class Login extends Component {
   };
   handleChangeUserType = event => {
     this.setState({ userType: event.target.value });
-    this.setState({ extension: '/account' + this.userType });
   };
 
   render() {
@@ -108,7 +107,7 @@ class Login extends Component {
              </div>
            </div>
             <div className = {classes.signInButtonWrapper}>
-              <Button className = {classes.signInButton} color="inherit" component={Link} to="/account">
+              <Button className = {classes.signInButton} color="inherit" component={Link} to="/useraccount">
                   Continue
               </Button>
             </div>
