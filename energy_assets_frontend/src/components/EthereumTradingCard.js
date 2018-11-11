@@ -22,6 +22,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Grow from '@material-ui/core/Grow';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Dropdown from './Dropdown'
 
 
 const styles = {
@@ -59,11 +60,6 @@ const styles = {
     marginLeft: "auto",
     marginRight: "auto",
   },
-  etherButton: {
-    float: "right",
-    paddingRight: "30%",
-    paddingTop: "2%",
-  },
   etherEntry: {
     float: "left"
   },
@@ -85,7 +81,6 @@ const muiTheme = getMuiTheme({
   slider: {
     selectionColor: 'green'
   },
-
 });
 
 
@@ -93,34 +88,9 @@ class Login extends Component {
   state = {
     value: 0.1,
     etherAmount: 1,
-    energyCertificate: 1,
-    open: false,
-    coin: "Ether",
-    energy: "REC"
+    energyCertificate: 1
   };
 
-  handleToggle = () => {
-    this.setState(state => ({ open: !state.open }));
-  };
-
-  handleClose = event => {
-    if (this.anchorEl.contains(event.target)) {
-      return;
-    }
-
-    this.setState({ open: false });
-  };
-
-  handleCoinChange = (coin) => (e) => {
-    this.setState({ coin: coin })
-    this.setState({ open: false });
-
-  };
-
-  handleEnergyChange = (energy) => (e) => {
-    this.setState({ energy: energy })
-    this.setState({ open: false });
-  };
 
   handleChangeSlider = (event, value) => {
     this.setState({ value });
@@ -132,7 +102,7 @@ class Login extends Component {
 
   render() {
     const { classes } = this.props;
-    const { value, open, coin, energy } = this.state;
+    const { value, openCoin, openEnergy, coin, energy } = this.state;
 
     return (
       <Card className = {classes.card}>
@@ -163,41 +133,11 @@ class Login extends Component {
                   />
                </FormControl>
               </CardContent>
-              <div className = {classes.etherButton}>
-                <Button
-                  buttonRef={node => {
-                    this.anchorEl = node;
-                  }}
-                  aria-owns={open ? 'ether-menu-list-grow' : undefined}
-                  aria-haspopup="true"
-                  onClick={this.handleToggle}
-                >
-                  {coin}
-                </Button>
-              </div>
-              <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    id="ether-menu-list-grow"
-                    style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                  >
-                    <Paper>
-                      <ClickAwayListener onClickAway={this.handleClose}>
-                        <MenuList>
-                          <MenuItem onClick={this.handleCoinChange('Ether')}>Ether</MenuItem>
-                          <MenuItem onClick={this.handleCoinChange('Bitcoin')}>Bitcoin</MenuItem>
-                          <MenuItem onClick={this.handleCoinChange('Dogecoin')}>Dogecoin</MenuItem>
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
+              <Dropdown menuItems = {["Ether", "Bitcoin", "DogeCoin"]}/>
           </Card>
           <CardContent className = {classes.conversion}>
-            <Typography variant="p" >
-              For 1 {coin} you will get 1 Energy Cerifiicate
+            <Typography variant="body1" >
+              For 1 Ether you will get 1 Energy Cerifiicate
             </Typography>
           </CardContent>
           <Card className = {classes.etherCard}>
@@ -211,37 +151,7 @@ class Login extends Component {
                   />
                </FormControl>
               </CardContent>
-              <div  className = {classes.etherButton}>
-                <Button
-                  buttonRef={node => {
-                    this.anchorEl = node;
-                  }}
-                  aria-owns={open ? 'energy-menu-list-grow' : undefined}
-                  aria-haspopup="true"
-                  onClick={this.handleToggle}
-                >
-                  {energy}
-                </Button>
-              </div>
-              <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    id="energy-menu-list-grow"
-                    style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                  >
-                    <Paper>
-                      <ClickAwayListener onClickAway={this.handleClose}>
-                        <MenuList>
-                          <MenuItem onClick={this.handleEnergyChange('REC')}>REC</MenuItem>
-                          <MenuItem onClick={this.handleEnergyChange('Hamster Wheel')}>Hamster Whell</MenuItem>
-                          <MenuItem onClick={this.handleEnergyChange('Static')}>Static</MenuItem>
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
+              <Dropdown menuItems = {["REC", "DEEZ", "LMNOP"]}/>
           </Card>
           <div className = {classes.continueButtonWrapper}>
             <Button variant="contained" className = {classes.continueButton}>

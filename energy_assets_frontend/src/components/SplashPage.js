@@ -11,12 +11,7 @@ const styles = {
     width: "100%",
     height: "80%",
     position: "absolute",
-    background: "-moz-linear-gradient(335deg, rgba(30,214,128,1) 0%, rgba(23,173,60,1) 100%)", /* ff3.6+ */
     background: "-webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(30,214,128,1)), color-stop(100%, rgba(23,173,60,1)))", /* safari4+,chrome */
-    background: "-webkit-linear-gradient(335deg, rgba(30,214,128,1) 0%, rgba(23,173,60,1) 100%)", /* safari5.1+,chrome10+ */
-    background: "-o-linear-gradient(335deg, rgba(30,214,128,1) 0%, rgba(23,173,60,1) 100%)", /* opera 11.10+ */
-    background: "-ms-linear-gradient(335deg, rgba(30,214,128,1) 0%, rgba(23,173,60,1) 100%)", /* ie10+ */
-    background: "linear-gradient(115deg, rgba(30,214,128,1) 0%, rgba(23,173,60,1) 100%)", /* w3c */
     filter: "progid:DXImageTransform.Microsoft.gradient( startColorstr='#1ED680', endColorstr='#17AD3C',GradientType=1 )" /* ie6-9 */
   },
   topText: {
