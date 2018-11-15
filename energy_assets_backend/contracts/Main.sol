@@ -332,7 +332,7 @@ contract Main {
     return etherBalances[addr];
   }
 
-  function getAddressType() public view return (uint8) {
+  function getAddressType() public view returns (uint8) {
     return addressType[msg.sender];
   }
 
@@ -439,5 +439,6 @@ contract Main {
     }
     return true;
   }
+
 
 }
