@@ -12,6 +12,7 @@ contract Main {
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   *  ==============================INIT=============================
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
   uint creditPerUnitOfCharge = 1;
   uint dollarPerUnitOfCharge = 900; // How much users get when they finish charging
   uint weiPerCredit = 1000; // How much each credit is sold for
@@ -45,6 +46,9 @@ contract Main {
 
   /* Maps user address to utility company address */
   mapping (address => address) private utilityCompanyOfUser;
+
+  /* Maps oracle address to user address*/
+  mapping (address => address) private ownerOfOracle;
 
   /*
   When a utility company puts x amount of credits on sale,
@@ -98,14 +102,18 @@ contract Main {
     revert();
   }
 
-  function userRegistration(address accountAddress, address utilityCompany) public
-    _is(masterAccess) returns (bool) {
-    if (addressType[utilityCompany] != 2) {
+  /* Function called by utility companies to register users */
+  function userRegistration(address accountAddress, address oracleAddress)
+    public returns (bool) {
+    if (addressType[msg.sender] != 2) {
+      revert();
       return false;
     }
     addressType[accountAddress] = 1;
-    utilityCompanyOfUser[accountAddress] = utilityCompany;
-    //TO DO: implement hold of ether from utility company
+    utilityCompanyOfUser[accountAddress] = msg.sender;
+    authorizedOracle[oracleAddress] = true;
+    ownerOfOracle[oracleAddress] = accountAddress;
+    //Not implemented: hold of ether from utility company
     return true;
   }
 
@@ -152,10 +160,16 @@ contract Main {
   *  ============CREDIT CREATION (FROM ENERGY TO CREDIT)============
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-  function chargeCompleted(uint amountInUnit, address owner)
+  /* Not implemented: charge history of users */
+
+  function chargeCompleted(uint amountInUnit)
     public _is(authorizedOracle) returns (bool){
-    balances[owner] += amountInUnit * dollarPerUnitOfCharge;
-    credits[utilityCompanyOfUser[owner]] += amountInUnit * creditPerUnitOfCharge;
+    if (ownerOfOracle[msg.sender] == 0x0) {
+      return false;
+    }
+    balances[ownerOfOracle[msg.sender]] += amountInUnit * dollarPerUnitOfCharge;
+    credits[utilityCompanyOfUser[ownerOfOracle[msg.sender]]] += amountInUnit * creditPerUnitOfCharge;
+    return true;
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -316,6 +330,10 @@ contract Main {
   function getEtherBalance(address addr) public view
     _is(masterAccess) returns (uint) {
     return etherBalances[addr];
+  }
+
+  function getAddressType() public view return (uint8) {
+    return addressType[msg.sender];
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
