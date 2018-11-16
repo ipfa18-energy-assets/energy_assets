@@ -9,6 +9,10 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { Link } from 'react-router-dom';
+import { withWeb3 } from 'react-web3-provider';
+import compose from 'recompose/compose';
+
+
 
 const styles = {
   background: {
@@ -62,10 +66,17 @@ class Login extends Component {
   handleChangeUserType = event => {
     this.setState({ userType: event.target.value });
   };
+  onSubmit =  async event => {
+    const { web3 } = this.props;
+    const accounts = await web3.eth.getAccounts();
+    console.log(accounts[0])
+  }
 
   render() {
     const { classes } = this.props
     const { userType } = this.state
+
+
     let signInButton
 
     if (userType == 'User') {
@@ -125,10 +136,13 @@ class Login extends Component {
             <div className = {classes.signInButtonWrapper}>
               {signInButton}
             </div>
+            <Button className = {classes.signInButton} color="inherit" onClick={this.onSubmit}>
+                  Continue
+            </Button>
           </Card >
         </div>
       </div>
     );
   }
 }
-export default withStyles(styles)(Login);
+export default compose(withStyles(styles), withWeb3)(Login);
