@@ -65,7 +65,7 @@ contract Main {
   1: Users (Vehicle Owners)
   2: Utility Companies
   3: Fossil Fuel Generators */
-  mapping(address => uint8) private addressType;
+  mapping(address => uint) private addressType;
 
   /*
   accessList ID:
@@ -322,23 +322,31 @@ contract Main {
     return utilityCompanyOfUser[user];
   }
 
-  function getCreditBalance(address addr) public view
+  function getCreditBalanceOf(address addr) public view
     _is(masterAccess) returns (uint) {
     return credits[addr];
   }
 
-  function getEtherBalance(address addr) public view
+  function getEtherBalanceOf(address addr) public view
     _is(masterAccess) returns (uint) {
     return etherBalances[addr];
-  }
-
-  function getAddressType() public view returns (uint8) {
-    return addressType[msg.sender];
   }
 
   function getAddressTypeOf(address addr) public view
   _is(masterAccess) returns (uint) {
     return addressType[addr];
+  }
+
+  function getCreditBalance() public view returns (uint) {
+    return credits[msg.sender];
+  }
+
+  function getEtherBalance() public view returns (uint) {
+    return etherBalances[msg.sender];
+  }
+
+  function getAddressType() public view returns (uint) {
+    return addressType[msg.sender];
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
