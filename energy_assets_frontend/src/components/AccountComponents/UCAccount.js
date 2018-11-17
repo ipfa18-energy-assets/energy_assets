@@ -58,7 +58,7 @@ class UCAccount extends Component {
     // }
     var currentState;
     if (currentShownComponent === "RegisteredUsers") {
-      currentState = (<RegisteredUsers action={'redeem'}/>)
+      currentState = (<RegisteredUsers action={'sell'}/>)
     } else {
       currentState = (<UserProfile/>)
     }

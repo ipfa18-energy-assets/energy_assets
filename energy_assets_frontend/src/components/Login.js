@@ -9,10 +9,9 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { Link } from 'react-router-dom';
-import { withWeb3 } from 'react-web3-provider';
+import web3 from './BlockchainWrappers/Web3';
 import compose from 'recompose/compose';
-
-
+import abi from './BlockchainWrappers/Abi'
 
 const styles = {
   background: {
@@ -67,9 +66,15 @@ class Login extends Component {
     this.setState({ userType: event.target.value });
   };
   onSubmit =  async event => {
-    const { web3 } = this.props;
-    const accounts = await web3.eth.getAccounts();
-    console.log(accounts[0])
+    const accounts = await web3.eth.getAccounts(function(error, result) {
+        if(error != null)
+            console.log("Couldn't get accounts");
+       const account = result[0]
+       web3.eth.defaultAccount = account
+       let abi_contract = web3.eth.contract(abi)
+       let addr_contract = abi_contract.at("0x8990ba16636510ed26c57f738dbe41caa91aedf9")
+       console.log(addr_contract.sell(1))
+    });
   }
 
   render() {
@@ -145,4 +150,4 @@ class Login extends Component {
     );
   }
 }
-export default compose(withStyles(styles), withWeb3)(Login);
+export default withStyles(styles)(Login);
