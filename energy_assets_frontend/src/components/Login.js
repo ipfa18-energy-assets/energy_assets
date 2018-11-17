@@ -20,7 +20,7 @@ const styles = {
     width: "100%",
     height: "80%",
     position: "absolute",
-    background: "-webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(30,214,128,1)), color-stop(100%, rgba(23,173,60,1)))", /* safari4+,chrome */
+    background: "linear-gradient(-180deg, #2D61D1 0%, #0FA8A4 81%)", /* safari4+,chrome */
     filter: "progid:DXImageTransform.Microsoft.gradient( startColorstr='#1ED680', endColorstr='#17AD3C',GradientType=1 )" /* ie6-9 */
   },
   topText: {
