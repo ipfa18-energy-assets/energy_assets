@@ -65,7 +65,7 @@ contract Main {
   1: Users (Vehicle Owners)
   2: Utility Companies
   3: Fossil Fuel Generators */
-  mapping(address => uint8) private addressType;
+  mapping(address => uint) private addressType;
 
   /*
   accessList ID:
@@ -103,19 +103,21 @@ contract Main {
   }
 
   /* Function called by utility companies to register users */
-  function userRegistration(address accountAddress, address oracleAddress)
+  function userRegistration(address userAddress, address oracleAddress)
     public returns (bool) {
     if (addressType[msg.sender] != 2) {
       revert();
       return false;
     }
-    addressType[accountAddress] = 1;
-    utilityCompanyOfUser[accountAddress] = msg.sender;
+    addressType[userAddress] = 1;
+    utilityCompanyOfUser[userAddress] = msg.sender;
     authorizedOracle[oracleAddress] = true;
-    ownerOfOracle[oracleAddress] = accountAddress;
+    ownerOfOracle[oracleAddress] = userAddress;
     //Not implemented: hold of ether from utility company
     return true;
   }
+
+
 
   /* Types of Acccount:
   0 (or any other number): Unverified/Unregistered/Uninitialized
@@ -127,14 +129,11 @@ contract Main {
   (possibly from an oracle) */
   function registration(address accountAddress, uint typeOfAccount) public
     _is(masterAccess) returns (bool){
-    if (typeOfAccount == 2) {
-      addressType[accountAddress] = 2;
-    } else if (typeOfAccount == 3) {
-      addressType[accountAddress] = 3;
-    } else {
-      return false;
+    if (typeOfAccount == 2 || typeOfAccount == 3) {
+      addressType[accountAddress] = typeOfAccount;
+      return true;
     }
-    return true;
+    return false;
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -332,13 +331,18 @@ contract Main {
     return etherBalances[addr];
   }
 
-  function getAddressType() public view returns (uint8) {
+  function getAddressType() public view returns (uint) {
     return addressType[msg.sender];
   }
 
   function getAddressTypeOf(address addr) public view
   _is(masterAccess) returns (uint) {
     return addressType[addr];
+  }
+
+  // CADD
+  function getMsgSender() public view returns (address) {
+    return msg.sender;
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -359,6 +363,11 @@ contract Main {
     authorizedToViewUserData[addr] = toViewUserData;
     authorizedToUpdateAccess[addr] = toUpdateAccess;
     authorizedOracle[addr] = oracle;
+  }
+
+  // CADD
+  function isAuthorizedToVerify(address addr) public view returns (bool) {
+    return authorizedToVerify[addr];
   }
 
   /* Quick mass granting of access for many accounts.

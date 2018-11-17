@@ -12,11 +12,26 @@ var Main = artifacts.require("Main");
   // accounts[9]: Public
 
 contract('Main', async (accounts) => {
-  it("should print out zero as the initial balance of owner", async () => {
-     let instance = await Main.deployed();
-     let balance = await instance.getUserBalance.call(accounts[0]);
-     assert.equal(balance.valueOf(), 0, "0 wasn't the initial balance");
-     let result = await instance.registration.call(accounts[1], 2);
-     assert.equal(result, true, "didn't register utility company successfully");
+  it("change access to an account", async () => {
+    let instance = await Main.deployed();
+    instance.changeAccess(accounts[1], false, true, false, false, false, false, false);
+    let result = await instance.isAuthorizedToVerify(accounts[1]);
+    assert.equal(result, true, "should not fail")
   });
+
+  // it("attempt to register", async () => {
+  //   let instance = await Main.deployed();
+  //   let sender_addr = await instance.
+  // });
+
+  it("testing registering utility company", async () => {
+    let instance = await Main.deployed();
+    await instance.registration(accounts[1], 2);
+    //assert.equal(result, true, "not registered");
+    let type = await instance.getAddressTypeOf.call(accounts[1]);
+    assert.equal(type.toNumber(), 2, "utility company is not registered");
+  });
+
+  
+
 });
