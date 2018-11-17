@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import EthereumTradingCard from './EthereumTradingCard'
+import { Link } from 'react-router-dom'
 
 
 const styles = {
@@ -11,27 +12,24 @@ const styles = {
     width: "100%",
     height: "80%",
     position: "absolute",
-    background: "-moz-linear-gradient(335deg, rgba(30,214,128,1) 0%, rgba(23,173,60,1) 100%)", /* ff3.6+ */
     background: "-webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(30,214,128,1)), color-stop(100%, rgba(23,173,60,1)))", /* safari4+,chrome */
-    background: "-webkit-linear-gradient(335deg, rgba(30,214,128,1) 0%, rgba(23,173,60,1) 100%)", /* safari5.1+,chrome10+ */
-    background: "-o-linear-gradient(335deg, rgba(30,214,128,1) 0%, rgba(23,173,60,1) 100%)", /* opera 11.10+ */
-    background: "-ms-linear-gradient(335deg, rgba(30,214,128,1) 0%, rgba(23,173,60,1) 100%)", /* ie10+ */
-    background: "linear-gradient(115deg, rgba(30,214,128,1) 0%, rgba(23,173,60,1) 100%)", /* w3c */
     filter: "progid:DXImageTransform.Microsoft.gradient( startColorstr='#1ED680', endColorstr='#17AD3C',GradientType=1 )" /* ie6-9 */
   },
   topText: {
     paddingTop: "10px",
     paddingLeft: "200px",
     color: "white",
-    fontFamily: 'Pattaya',
     float: "left"
   },
   signIn: {
     paddingTop: "10px",
     color: "white",
-    fontFamily: 'Pattaya',
     float: "right",
     position: "relative"
+  },
+  signInText: {
+    paddingTop: "10px",
+    color: "white",
   },
   topBox: {
     width: "1300px",// This controls how far right sign in is
@@ -57,10 +55,6 @@ const styles = {
 
 class SplashPage extends Component {
 
-
-    componentWillMount() {
-    }
-
     render() {
 
       const { classes } = this.props
@@ -71,9 +65,11 @@ class SplashPage extends Component {
                   <Typography className = {classes.topText} variant="headline">
                     Changelly
                   </Typography>
-                  <Typography className = {classes.signIn} variant="headline">
-                    Sign In ->
-                  </Typography>
+                  <Button className = {classes.signIn} color="inherit" component={Link} to="/login">
+                    <Typography  className = {classes.signInText} variant="headline">
+                      Sign In ->
+                    </Typography>
+                  </Button>
                 </div>
                 <div className={classes.lowerWrapper}>
                   <div className = {classes.leftLower}>
