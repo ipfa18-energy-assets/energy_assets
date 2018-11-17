@@ -3,10 +3,11 @@ import {render} from 'react-dom'
 import App from './App'
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom'
+import Web3 from 'web3';
 
 render (
     <BrowserRouter>
-      <App />
+          <App />
     </BrowserRouter>,
   document.getElementById('root')
 )

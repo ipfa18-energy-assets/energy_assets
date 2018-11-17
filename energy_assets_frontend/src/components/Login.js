@@ -9,6 +9,9 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { Link } from 'react-router-dom';
+import compose from 'recompose/compose';
+
+
 
 const styles = {
   background: {
@@ -61,11 +64,33 @@ class Login extends Component {
   };
   handleChangeUserType = event => {
     this.setState({ userType: event.target.value });
-    this.setState({ extension: '/account' + this.userType });
   };
+  onSubmit =  async event => {
+    const { web3 } = this.props;
+    const accounts = await web3.eth.getAccounts();
+    console.log(accounts[0])
+  }
 
   render() {
     const { classes } = this.props
+    const { userType } = this.state
+
+
+    let signInButton
+
+    if (userType == 'User') {
+      signInButton = (<Button className = {classes.signInButton} color="inherit" component={Link} to="/useraccount">
+            Continue
+            </Button>)
+    } else if (userType == 'UC') {
+      signInButton = (<Button className = {classes.signInButton} color="inherit" component={Link} to="/ucaccount">
+            Continue
+            </Button>)
+    } else {
+      signInButton = (<Button className = {classes.signInButton} color="inherit" component={Link} to="/ffgaccount">
+            Continue
+            </Button>)
+    }
     return (
       <div className={classes.background}>
         <div className = {classes.mainCardWrapper}>
@@ -108,14 +133,15 @@ class Login extends Component {
              </div>
            </div>
             <div className = {classes.signInButtonWrapper}>
-              <Button className = {classes.signInButton} color="inherit" component={Link} to="/account">
-                  Continue
-              </Button>
+              {signInButton}
             </div>
+            <Button className = {classes.signInButton} color="inherit" onClick={this.onSubmit}>
+                  Continue
+            </Button>
           </Card >
         </div>
       </div>
     );
   }
 }
-export default withStyles(styles)(Login);
+export default compose(withStyles(styles))(Login);
