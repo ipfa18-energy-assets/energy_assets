@@ -1,7 +1,5 @@
 var Main = artifacts.require("Main");
 
-contract('Main', function(accounts) {
-
   // accounts[0]: MasterAccess
   // accounts[1]: Utility Company1
   // accounts[2]: Utility Company2
@@ -13,12 +11,12 @@ contract('Main', function(accounts) {
   // accounts[8]: Adversarial Actor
   // accounts[9]: Public
 
-  it("should print out zero as the initial balance of owner", function() {
-    return Main.deployed().then(function(instance) {
-      return instance.getUserBalance.call(accounts[0]);
-    }).then(function(balance) {
-      assert.equal(balance.valueOf(), 0, "0 wasn't the initial balance");
-    });
+contract('Main', async (accounts) => {
+  it("should print out zero as the initial balance of owner", async () => {
+     let instance = await Main.deployed();
+     let balance = await instance.getUserBalance.call(accounts[0]);
+     assert.equal(balance.valueOf(), 0, "0 wasn't the initial balance");
+     let result = await instance.registration.call(accounts[1], 2);
+     assert.equal(result, true, "didn't register utility company successfully");
   });
-
 });
