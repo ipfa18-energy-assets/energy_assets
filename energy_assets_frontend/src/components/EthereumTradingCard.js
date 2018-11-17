@@ -12,6 +12,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Dropdown from './Dropdown'
+import web3 from './BlockchainWrappers/Web3';
+import abi from './BlockchainWrappers/Abi'
 
 
 const styles = {
@@ -74,7 +76,7 @@ const muiTheme = getMuiTheme({
 });
 
 
-class Login extends Component {
+class EthereumTradingCard extends Component {
   state = {
     value: 0.1,
     etherAmount: 1,
@@ -89,6 +91,10 @@ class Login extends Component {
   handleChangeEther = prop => event => {
    this.setState({ [prop]: event.target.value });
   };
+
+  handleTransaction = event => {
+
+  }
 
   render() {
     const { classes } = this.props;
@@ -144,7 +150,7 @@ class Login extends Component {
               <Dropdown menuItems = {["REC", "LCFS", "LMNOP"]}/>
           </Card>
           <div className = {classes.continueButtonWrapper}>
-            <Button variant="contained" className = {classes.continueButton}>
+            <Button variant="contained" className = {classes.continueButton} onClick = {this.handleTransaction}>
               Continue
             </Button>
           </div>
@@ -153,4 +159,4 @@ class Login extends Component {
     );
   }
 }
-export default withStyles(styles)(Login);
+export default withStyles(styles)(EthereumTradingCard);

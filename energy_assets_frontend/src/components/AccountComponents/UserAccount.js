@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import UserProfile from './AccountComponents/UserProfile'
-import History from './AccountComponents/History'
-import RegisterVE from './AccountComponents/RegisterVE'
-import EthereumTradingCard from './EthereumTradingCard'
-import SplashPage from './SplashPage'
+import EthereumTradingCard from '../EthereumTradingCard'
+import SplashPage from '../SplashPage'
+import UserProfile from './Tabs/UserProfile'
+import History from './Tabs/History'
+import RegisterVE from './Tabs/RegisterVE'
 
 
 const styles = {
@@ -32,7 +32,7 @@ const styles = {
 }
 
 
-class AccountTemplate extends Component {
+class UserAccount extends Component {
   state = {
     name: "David Chi",
     creditBalance: "1234",
@@ -68,6 +68,7 @@ class AccountTemplate extends Component {
     }
 
 
+
     return (
       <div className = {classes.background}>
         <div className = {classes.menu}>
@@ -89,4 +90,4 @@ class AccountTemplate extends Component {
     );
   }
 }
-export default withStyles(styles)(AccountTemplate);
+export default withStyles(styles)(UserAccount);
