@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import EthereumTradingCard from '../EthereumTradingCard';
+import { Link } from 'react-router-dom';
 
 
 
@@ -31,7 +33,7 @@ const styles = {
 
 class UserProfile extends Component {
   state = {
-    name: "David Chi",
+    Address: "191910239231sda",
     creditBalance: "1234",
     etherBalance: "12",
     utilityCompany: "FF"
@@ -51,10 +53,9 @@ class UserProfile extends Component {
         <div className = {classes.userProf}>
           <div>
             <TextField
-              label="Name"
+              label="Address"
               className={classes.textField}
-              value={this.state.name}
-              onChange={this.handleChange('name')}
+              value={this.state.Address}
               margin="normal"
               variant="outlined"
             />
@@ -74,7 +75,6 @@ class UserProfile extends Component {
               label="Utility Company"
               className={classes.textField}
               value={this.state.utilityCompany}
-              onChange={this.handleChange('utilityCompany')}
               margin="normal"
               variant="outlined"
             />
@@ -91,10 +91,10 @@ class UserProfile extends Component {
           </div>
         <div>
           <div>
-            <Button variant="contained" className = {classes.button}>
+            <Button className = {classes.button} color="inherit" component={Link} to="/EthereumTradingCard">
               Redeem
             </Button>
-            <Button variant="contained" className = {classes.button}>
+            <Button className = {classes.button} color="inherit" component={Link} to="/">
               Home
             </Button>
           </div>
@@ -103,4 +103,5 @@ class UserProfile extends Component {
     );
   }
 }
+
 export default withStyles(styles)(UserProfile);

@@ -5,13 +5,15 @@ import Button from '@material-ui/core/Button';
 import UserProfile from './AccountComponents/UserProfile'
 import History from './AccountComponents/History'
 import RegisterVE from './AccountComponents/RegisterVE'
+import EthereumTradingCard from './EthereumTradingCard'
+import SplashPage from './SplashPage'
 
 
 const styles = {
   menu: {
     float: "left",
     background: "-webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(18,53,255,1)), color-stop(100%, rgba(20,255,255,1)))", /* safari4+,chrome */
-    width: "20%",
+    width: "10%",
     height: "100%",
   },
   background: {
@@ -61,7 +63,7 @@ class AccountTemplate extends Component {
       currentState = (<RegisterVE/>)
     } else if (currentShownComponent === "History") {
       currentState = (<History/>)
-    } else {
+    } else if (currentShownComponent === "UserProfile"){
       currentState = (<UserProfile/>)
     }
 
