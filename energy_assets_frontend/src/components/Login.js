@@ -12,6 +12,8 @@ import { Link } from 'react-router-dom';
 import web3 from './BlockchainWrappers/Web3';
 import compose from 'recompose/compose';
 import abi from './BlockchainWrappers/Abi'
+import { Redirect } from 'react-router-dom'
+
 
 const styles = {
   background: {
@@ -54,7 +56,7 @@ class Login extends Component {
   state = {
     username: "",
     password: "",
-    userType: 'User',
+    userType: '',
   }
   handleChangeUsername = prop => event => {
    this.setState({ [prop]: event.target.value });
@@ -66,6 +68,7 @@ class Login extends Component {
     this.setState({ userType: event.target.value });
   };
   onSubmit =  async event => {
+    var self = this
     const accounts = await web3.eth.getAccounts(function(error, result) {
         if(error != null)
             console.log("Couldn't get accounts");
@@ -73,29 +76,29 @@ class Login extends Component {
        web3.eth.defaultAccount = account
        let abi_contract = web3.eth.contract(abi)
        let addr_contract = abi_contract.at("0x8990ba16636510ed26c57f738dbe41caa91aedf9")
-       console.log(addr_contract.sell(1))
-    });
+       let userType = 1 //addr_contract.getUserType(account) Waiting on this function
+       if (userType == 1) {
+         self.setState({userType: "User"})
+       } else if (userType == 2) {
+         self.setState({userType: "UC"})
+       } else {
+         self.setState({userType: "FFG"})
+       }
+    })
   }
 
   render() {
     const { classes } = this.props
     const { userType } = this.state
 
-
     let signInButton
 
     if (userType == 'User') {
-      signInButton = (<Button className = {classes.signInButton} color="inherit" component={Link} to="/useraccount">
-            Continue
-            </Button>)
+      return <Redirect to='/useraccount' />
     } else if (userType == 'UC') {
-      signInButton = (<Button className = {classes.signInButton} color="inherit" component={Link} to="/ucaccount">
-            Continue
-            </Button>)
-    } else {
-      signInButton = (<Button className = {classes.signInButton} color="inherit" component={Link} to="/ffgaccount">
-            Continue
-            </Button>)
+      return <Redirect to='/ucaccount' />
+    } else if (userType == 'FFG') {
+      return <Redirect to='/ffgaccount' />
     }
     return (
       <div className={classes.background}>
@@ -105,18 +108,6 @@ class Login extends Component {
               SIGN INTO YOUR ACCOUNT
             </Typography>
             <div className = {classes.accountTypes}>
-            <FormControl component="fieldset" className={classes.formControl}>
-              <RadioGroup
-                className={classes.group}
-                value={this.state.userType}
-                onChange={this.handleChangeUserType}
-                row
-              >
-                <FormControlLabel value="User" control={<Radio />} label="User" />
-                <FormControlLabel value="UC" control={<Radio />} label="UC" />
-                <FormControlLabel value="FFGs" control={<Radio />} label="FFGs" />
-              </RadioGroup>
-            </FormControl>
             </div>
             <div className = {classes.inputs}>
               <div>
@@ -139,11 +130,10 @@ class Login extends Component {
              </div>
            </div>
             <div className = {classes.signInButtonWrapper}>
-              {signInButton}
-            </div>
-            <Button className = {classes.signInButton} color="inherit" onClick={this.onSubmit}>
-                  Continue
-            </Button>
+              <Button className = {classes.signInButton} color="inherit" onClick={this.onSubmit}>
+                    Continue
+                    </Button>
+              </div>
           </Card >
         </div>
       </div>
