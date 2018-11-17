@@ -17,7 +17,7 @@ contract Greeter {
      * Greet function
      */
     /// @dev returns the String value stored in the global `greeting` variable
-    function greet() constant returns (string) {
+    function greet() public constant returns (string) {
         return greeting;
 
     }
