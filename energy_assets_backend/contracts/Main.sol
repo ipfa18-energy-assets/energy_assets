@@ -336,6 +336,11 @@ contract Main {
     return addressType[msg.sender];
   }
 
+  function getAddressTypeOf(address addr) public view
+  _is(masterAccess) returns (uint) {
+    return addressType[addr];
+  }
+
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   *  =========================CHANGE ACCESS=========================
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
