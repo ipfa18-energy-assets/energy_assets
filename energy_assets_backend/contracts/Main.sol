@@ -321,18 +321,14 @@ contract Main {
     return utilityCompanyOfUser[user];
   }
 
-  function getCreditBalance(address addr) public view
+  function getCreditBalanceOf(address addr) public view
     _is(masterAccess) returns (uint) {
     return credits[addr];
   }
 
-  function getEtherBalance(address addr) public view
+  function getEtherBalanceOf(address addr) public view
     _is(masterAccess) returns (uint) {
     return etherBalances[addr];
-  }
-
-  function getAddressType() public view returns (uint) {
-    return addressType[msg.sender];
   }
 
   function getAddressTypeOf(address addr) public view
@@ -340,9 +336,16 @@ contract Main {
     return addressType[addr];
   }
 
-  // CADD
-  function getMsgSender() public view returns (address) {
-    return msg.sender;
+  function getCreditBalance() public view returns (uint) {
+    return credits[msg.sender];
+  }
+
+  function getEtherBalance() public view returns (uint) {
+    return etherBalances[msg.sender];
+  }
+
+  function getAddressType() public view returns (uint) {
+    return addressType[msg.sender];
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
