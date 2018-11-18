@@ -2,18 +2,16 @@ import React, { Component } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import UserProfile from './AccountComponents/UserProfile'
-import History from './AccountComponents/History'
-import RegisterVE from './AccountComponents/RegisterVE'
-import EthereumTradingCard from './EthereumTradingCard'
-import SplashPage from './SplashPage'
+import UserProfile from './Tabs/UserProfile'
+import RegisteredUsers from './Tabs/RegisteredUsers'
+
 
 
 const styles = {
   menu: {
     float: "left",
     background: "-webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(18,53,255,1)), color-stop(100%, rgba(20,255,255,1)))", /* safari4+,chrome */
-    width: "10%",
+    width: "20%",
     height: "100%",
   },
   background: {
@@ -32,7 +30,7 @@ const styles = {
 }
 
 
-class AccountTemplate extends Component {
+class UCAccount extends Component {
   state = {
     name: "David Chi",
     creditBalance: "1234",
@@ -59,11 +57,9 @@ class AccountTemplate extends Component {
     //   )
     // }
     var currentState;
-    if (currentShownComponent === "RegisterVE") {
-      currentState = (<RegisterVE/>)
-    } else if (currentShownComponent === "History") {
-      currentState = (<History/>)
-    } else if (currentShownComponent === "UserProfile"){
+    if (currentShownComponent === "RegisteredUsers") {
+      currentState = (<RegisteredUsers action={'sell'}/>)
+    } else {
       currentState = (<UserProfile/>)
     }
 
@@ -74,11 +70,8 @@ class AccountTemplate extends Component {
           <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
             Profile
           </Button>
-          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("History")}>
-            History
-          </Button>
-          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("RegisterVE")}>
-            Registered VE
+          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("RegisteredUsers")}>
+            Registered Users
           </Button>
         </div>
         <div>
@@ -89,4 +82,4 @@ class AccountTemplate extends Component {
     );
   }
 }
-export default withStyles(styles)(AccountTemplate);
+export default withStyles(styles)(UCAccount);

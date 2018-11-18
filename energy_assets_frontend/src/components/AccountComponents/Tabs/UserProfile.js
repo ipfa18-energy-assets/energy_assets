@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import EthereumTradingCard from '../EthereumTradingCard';
+import EthereumTradingCard from '../../EthereumTradingCard';
 import { Link } from 'react-router-dom';
 
 
@@ -47,7 +47,17 @@ class UserProfile extends Component {
 
 
   render() {
-    const { classes } = this.props;
+    const { classes, action } = this.props;
+    let actionButton
+    if (action == "redeem") {
+      actionButton = (<Button variant="contained" className = {classes.button}>
+                        Redeem
+                      </Button>)
+    } else {
+      actionButton = (<Button variant="contained" className = {classes.button}>
+                        Sell
+                      </Button>)
+    }
 
     return (
         <div className = {classes.userProf}>
