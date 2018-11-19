@@ -348,6 +348,24 @@ contract Main {
     return addressType[msg.sender];
   }
 
+  // get prices
+  
+  function getCreditPerUnitOfCharge() public view returns (uint256) {
+    return creditPerUnitOfCharge;
+  }
+
+  function getDollarPerUnitOfCharge() public view returns (uint256) {
+    return dollarPerUnitOfCharge;
+  }
+
+  function getWeiPerCredit() public view returns (uint256) {
+    return weiPerCredit;
+  }
+
+  function getUSDperETH() public view returns (uint256) {
+    return USDperETH;
+  }
+
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   *  =========================CHANGE ACCESS=========================
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
