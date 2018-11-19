@@ -80,7 +80,7 @@ class EthereumTradingCard extends Component {
   state = {
     value: 0.1,
     etherAmount: 1,
-    energyCertificate: 1
+    energyCertificate: 2
   };
 
 
@@ -141,8 +141,8 @@ class EthereumTradingCard extends Component {
                 <FormControl fullWidth error={this.state.isErrorState} >
                   <Input
                     id="adornment-amount"
-                    value={this.state.etherAmount}
-                    onChange={this.handleChangeEther('etherAmount')}
+                    value={this.state.energyCertificate}
+                    onChange={this.handleChangeEther('energyCertificate')}
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}
                   />
                </FormControl>
