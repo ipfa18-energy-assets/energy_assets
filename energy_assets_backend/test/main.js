@@ -55,6 +55,19 @@ contract('Main', async (accounts) => {
 
     utilBalanceInWei = await instance.getEtherBalance.call({from: accounts[1]});
     assert.equal(utilBalanceInWei.toNumber(), oldUtilBalanceInWei - amount, "util balance is incorrect");
+
+    // sell/buy #2
+    await instance.etherDeposit({from: accounts[4], value: 2*1e18});
+    await instance.sell(1, {from: accounts[1]});
+    await instance.buy(1, {from: accounts[4]});
+    utilBalance = await instance.getCreditBalance.call({from: accounts[1]});
+    utilBalanceInWei = await instance.getEtherBalance.call({from: accounts[1]});
+    ffBalance = await instance.getCreditBalance.call({from: accounts[4]});
+    ffBalanceInWei = await instance.getEtherBalance.call({from: accounts[4]});
+    assert.equal(utilBalanceInWei.toNumber(), oldUtilBalanceInWei - amount + 1e18, "util wei is incorrect");
+    assert.equal(ffBalanceInWei.toNumber(), 1e18, "ff wei is incorrect");
+    assert.equal(utilBalance.toNumber(), 0, "util balance is incorrect");
+    assert.equal(ffBalance.toNumber(), 1, "ff balance is incorrect");
   });
 
 });
