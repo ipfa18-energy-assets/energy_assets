@@ -67,24 +67,19 @@ class Login extends Component {
   handleChangeUserType = event => {
     this.setState({ userType: event.target.value });
   };
-  onSubmit =  async event => {
+  onSubmit = event => {
     var self = this
-    const accounts = await web3.eth.getAccounts(function(error, result) {
-        if(error != null)
-            console.log("Couldn't get accounts");
-       const account = result[0]
-       web3.eth.defaultAccount = account
-       let abi_contract = web3.eth.contract(abi)
-       let addr_contract = abi_contract.at("0x8990ba16636510ed26c57f738dbe41caa91aedf9")
-       let userType = 1 //addr_contract.getUserType(account) Waiting on this function
-       if (userType == 1) {
-         self.setState({userType: "User"})
-       } else if (userType == 2) {
-         self.setState({userType: "UC"})
-       } else {
-         self.setState({userType: "FFG"})
-       }
-    })
+    web3.eth.defaultAccount = web3.eth.coinbase
+    let abi_contract = web3.eth.contract(abi)
+    let addr_contract = abi_contract.at("0xd7e3c1741fd42562af1532a44409945b8342809d")
+    let userType = addr_contract.getAddressType()
+    if (userType == 1) {
+      self.setState({userType: "User"})
+    } else if (userType == 2) {
+      self.setState({userType: "UC"})
+    } else {
+      self.setState({userType: "FFG"})
+    }
   }
 
   render() {
