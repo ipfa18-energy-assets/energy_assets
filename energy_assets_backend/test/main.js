@@ -15,6 +15,8 @@ contract('Main', async (accounts) => {
 
   it("comprehensive test", async () => {
     let instance = await Main.deployed();
+
+    // registrations
     await instance.registration(accounts[1], 2);
     await instance.registration(accounts[2], 2);
     await instance.registration(accounts[3], 3);
@@ -23,25 +25,36 @@ contract('Main', async (accounts) => {
     await instance.userRegistration(accounts[6], accounts[9], {from: accounts[2]});
     await instance.changeAccess(accounts[7], false, true, true, true, false, false, false);
 
+    // charging
     await instance.chargeCompleted(2, {from: accounts[8]});
-    let userBalance = await instance.getUserBalance.call(accounts[5]);
+    let userBalance = await instance.getUserBalanceOf.call(accounts[5]);
     let utilBalance = await instance.getCreditBalance.call({from: accounts[1]});
-    assert.equal(userBalance.toNumber(), 1800, "user balance is incorrect");
+    assert.equal(userBalance.toNumber(), 18, "user balance is incorrect");
     assert.equal(utilBalance.toNumber(), 2, "util balance is incorrect");
 
-    await instance.etherDeposit({from: accounts[3], value: 2000});
+    // sell/buy
+    await instance.etherDeposit({from: accounts[3], value: 2*1e18});
     await instance.sell(1, {from: accounts[1]});
     await instance.buy(1, {from: accounts[3]});
     utilBalance = await instance.getCreditBalance.call({from: accounts[1]});
     let utilBalanceInWei = await instance.getEtherBalance.call({from: accounts[1]});
     let ffBalance = await instance.getCreditBalance.call({from: accounts[3]});
     let ffBalanceInWei = await instance.getEtherBalance.call({from: accounts[3]});
-    assert.equal(utilBalanceInWei.toNumber(), 1000, "util wei is incorrect");
-    assert.equal(ffBalanceInWei.toNumber(), 1000, "ff wei is incorrect");
+    assert.equal(utilBalanceInWei.toNumber(), 1e18, "util wei is incorrect");
+    assert.equal(ffBalanceInWei.toNumber(), 1e18, "ff wei is incorrect");
     assert.equal(utilBalance.toNumber(), 1, "util balance is incorrect");
     assert.equal(ffBalance.toNumber(), 1, "ff balance is incorrect");
 
+    // user withdrawal
+    let amount = await instance.USDtoETH(18);
+    let oldUtilBalanceInWei = await instance.getEtherBalance.call({from: accounts[1]});
 
+    await instance.userWithdrawal(18, {from: accounts[5]});
+    userBalance = await instance.getUserBalanceOf.call(accounts[5]);
+    assert.equal(userBalance.toNumber(), 0, "user balance is incorrect");
+
+    utilBalanceInWei = await instance.getEtherBalance.call({from: accounts[1]});
+    assert.equal(utilBalanceInWei.toNumber(), oldUtilBalanceInWei - amount, "util balance is incorrect");
   });
 
 });
