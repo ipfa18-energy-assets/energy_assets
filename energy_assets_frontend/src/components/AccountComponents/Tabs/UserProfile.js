@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import EthereumTradingCard from '../../EthereumTradingCard';
 import { Link } from 'react-router-dom';
 
 
@@ -49,12 +48,17 @@ class UserProfile extends Component {
   render() {
     const { classes, action } = this.props;
     let actionButton
-    if (action == "redeem") {
-      actionButton = (<Button variant="contained" className = {classes.button}>
+      //We should set the etherbalance to the below:
+      //  web3.eth.getBalance(web3.eth.coinbase, function(err, balance) {
+      //   //this.balance = this.web3.fromWei(balance, "ether") + " ETH"
+      //   console.log(balance.toString())
+      // });
+    if (action === "redeem") {
+      actionButton = (<Button color="inherit" className = {classes.button} component={Link} to={{ pathname: "/EthereumTradingCard", state: { transaction: 'Redeem'} }}>
                         Redeem
                       </Button>)
     } else {
-      actionButton = (<Button variant="contained" className = {classes.button}>
+      actionButton = (<Button color="inherit" className = {classes.button} component={Link} to={{ pathname: "/EthereumTradingCard", state: { transaction: 'Sell'} }}>
                         Sell
                       </Button>)
     }
@@ -101,9 +105,7 @@ class UserProfile extends Component {
           </div>
         <div>
           <div>
-            <Button className = {classes.button} color="inherit" component={Link} to="/EthereumTradingCard">
-              Redeem
-            </Button>
+            {actionButton}
             <Button className = {classes.button} color="inherit" component={Link} to="/">
               Home
             </Button>

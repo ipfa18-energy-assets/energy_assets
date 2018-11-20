@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import EthereumTradingCard from '../EthereumTradingCard'
-import SplashPage from '../SplashPage'
 import UserProfile from './Tabs/UserProfile'
 import History from './Tabs/History'
 import RegisterVE from './Tabs/RegisterVE'
@@ -51,13 +49,6 @@ class UserAccount extends Component {
   render() {
     const { classes } = this.props;
     const { currentShownComponent } = this.state;
-    // if (this.props.buttons) {
-    //   const buttons = this.props.buttons.map((buttonName) =>
-    //     <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange({buttonName})}>
-    //       {buttonName}
-    //     </Button>
-    //   )
-    // }
     var currentState;
     if (currentShownComponent === "RegisterVE") {
       currentState = (<RegisterVE/>)

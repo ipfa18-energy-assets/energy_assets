@@ -1,6 +1,5 @@
 import web3 from './Web3';
 
-let address = "0x9b9c6c54dac668e49dee21143e0a3b1e5abf2e1db"
 let abi = [
 	{
 		"constant": false,
@@ -512,4 +511,8 @@ let abi = [
 		"type": "fallback"
 	}
 ]
-export default abi
+let address = "0xc6a265f53565fe53a334cb4bad2645d7a9a0b328"
+web3.eth.defaultAccount = web3.eth.coinbase
+let abi_contract = web3.eth.contract(abi)
+let addr_contract = abi_contract.at(address)
+export default addr_contract

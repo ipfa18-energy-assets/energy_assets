@@ -13,7 +13,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Dropdown from './Dropdown'
 import web3 from './BlockchainWrappers/Web3';
-import abi from './BlockchainWrappers/Abi'
+import contract from './BlockchainWrappers/Abi'
 
 
 const styles = {
@@ -80,7 +80,7 @@ class EthereumTradingCard extends Component {
   state = {
     value: 0.1,
     etherAmount: 1,
-    energyCertificate: 2
+    certificateAmount: 900
   };
 
 
@@ -89,16 +89,24 @@ class EthereumTradingCard extends Component {
   };
 
   handleChangeEther = prop => event => {
-   this.setState({ [prop]: event.target.value });
+   this.setState({ [prop]: event.target.value, certificateAmount: event.target.value * 900 });
+  };
+  handleChangeCertificate = prop => event => {
+   this.setState({ [prop]: event.target.value, etherAmount: event.target.value / 900 });
   };
 
   handleTransaction = event => {
+    web3.eth.getBalance(web3.eth.coinbase, function(err, balance) {
 
+      console.log(balance.toString())
+    });
   }
 
   render() {
     const { classes } = this.props;
-    const { value } = this.state;
+    const { value, etherAmount } = this.state;
+    const energyCertificate = etherAmount * 900
+    console.log(this.props.location.state)
 
     return (
       <Card className = {classes.card}>
@@ -123,7 +131,7 @@ class EthereumTradingCard extends Component {
                 <FormControl fullWidth error={this.state.isErrorState} >
                   <Input
                     id="adornment-amount"
-                    value={this.state.etherAmount}
+                    value={etherAmount}
                     onChange={this.handleChangeEther('etherAmount')}
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}
                   />
@@ -141,8 +149,8 @@ class EthereumTradingCard extends Component {
                 <FormControl fullWidth error={this.state.isErrorState} >
                   <Input
                     id="adornment-amount"
-                    value={this.state.energyCertificate}
-                    onChange={this.handleChangeEther('energyCertificate')}
+                    value={energyCertificate}
+                    onChange={this.handleChangeCertificate('energyCertificate')}
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}
                   />
                </FormControl>
