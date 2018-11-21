@@ -6,8 +6,6 @@ import UserProfile from './Tabs/UserProfile'
 import History from './Tabs/History'
 import RegisterVE from './Tabs/RegisterVE'
 import RegisteredUsers from './Tabs/RegisteredUsers'
-import EthereumTradingCard from './EthereumTradingCard'
-import SplashPage from './SplashPage'
 
 
 const styles = {
@@ -51,15 +49,7 @@ class AccountTemplate extends Component {
   render() {
     const { classes } = this.props;
     const { currentShownComponent, accountType, address } = this.state;
-    // if (this.props.buttons) {
-    //   const buttons = this.props.buttons.map((buttonName) =>
-    //     <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange({buttonName})}>
-    //       {buttonName}
-    //     </Button>
-    //   )
-    // }
-    console.log(accountType)
-    var currentState;
+    var currentState
     let accountSideBar
     if (accountType === 'User') {
       accountSideBar = (<div className = {classes.menu}>
@@ -103,11 +93,11 @@ class AccountTemplate extends Component {
       currentState = (<History/>)
     } else if (currentShownComponent === "UserProfile"){
       if (accountType === "User") {
-        currentState = (<UserProfile action={'redeem'} address={address}/>)
+        currentState = (<UserProfile action={'redeem'} address={address} accountType={accountType}/>)
       } else if (accountType === "UC") {
-        currentState = (<UserProfile action={'sell'} address={address}/>)
+        currentState = (<UserProfile action={'sell'} address={address} accountType={accountType}/>)
       } else {
-        currentState = (<UserProfile action={'buy'} address={address}/>)
+        currentState = (<UserProfile action={'buy'} address={address} accountType={accountType}/>)
       }
     } else if (currentShownComponent === "RegisteredUsers") {
       currentState = (<RegisteredUsers/>)
@@ -116,17 +106,7 @@ class AccountTemplate extends Component {
 
     return (
       <div className = {classes.background}>
-        <div className = {classes.menu}>
-          <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
-            Profile
-          </Button>
-          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("History")}>
-            History
-          </Button>
-          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("RegisterVE")}>
-            Registered VE
-          </Button>
-        </div>
+        {accountSideBar}
         <div>
           UserProfile
         </div>

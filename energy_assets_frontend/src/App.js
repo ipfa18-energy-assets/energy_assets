@@ -5,6 +5,7 @@ import SplashPage from './components/SplashPage'
 import Login from './components/Login'
 import Tradeing from './components/EthereumTradingCard'
 import Account from './components/AccountTemplate'
+import Register from './components/Tabs/Register'
 
 
 class App extends Component {
@@ -16,6 +17,8 @@ class App extends Component {
                 <Route exact path='/login' component={Login}/>
                 <Route exact path='/EthereumTradingCard' component= {Tradeing}/>
                 <Route exact path='/account' component={Account}/>
+                <Route exact path='/register' component={Register}/>
+
               </Switch>
             </div>
         );

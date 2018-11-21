@@ -12,8 +12,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Dropdown from './Dropdown'
-import web3 from './BlockchainWrappers/Web3';
 import contract from './BlockchainWrappers/Abi'
+import { Redirect } from 'react-router-dom'
+
 
 
 const styles = {
@@ -82,7 +83,10 @@ class EthereumTradingCard extends Component {
     etherAmount: 1,
     certificateAmount: 1 * Number(contract.getDollarPerUnitOfCharge()),
     transactionType: this.props.location.state.transaction.action,
-    dollarPerUnitOfCharge: Number(contract.getDollarPerUnitOfCharge())
+    dollarPerUnitOfCharge: Number(contract.getDollarPerUnitOfCharge()),
+    address: this.props.location.state.address,
+    accountType: this.props.location.state.accountType,
+    transactionDone: false
   };
 
 
@@ -94,20 +98,31 @@ class EthereumTradingCard extends Component {
    this.setState({ [prop]: event.target.value, certificateAmount: event.target.value * this.state.dollarPerUnitOfCharge });
   };
   handleChangeCertificate = prop => event => {
-
    this.setState({ [prop]: event.target.value, etherAmount: event.target.value / this.state.dollarPerUnitOfCharge });
   };
 
   handleTransaction = event => {
-    web3.eth.getBalance(web3.eth.coinbase, function(err, balance) {
+    const address = this.state.address
+    const transactionType = this.state.transactionType
+    const certificateAmount = this.state.certificateAmount
 
-      console.log(balance.toString())
-    });
+    if (transactionType === "buy") {
+      contract.buy(certificateAmount, {from: address})
+    } else if (transactionType === "sell") {
+      contract.sell(certificateAmount, {from: address})
+    } else if (transactionType === "redeem") {
+      contract.chargeCompleted(certificateAmount, {from: address})
+    }
+    this.setState({transactionDone: true})
+
   }
 
   render() {
     const { classes } = this.props;
-    const { value, etherAmount, certificateAmount, transactionType, dollarPerUnitOfCharge } = this.state;
+    const { value, etherAmount, certificateAmount, transactionType, dollarPerUnitOfCharge, transactionDone, accountType} = this.state;
+    if (transactionDone) {
+      return <Redirect to={{ pathname: "/account", state: { address: this.state.address, accountType: accountType} }} />
+    }
     return (
       <Card className = {classes.card}>
           <MuiThemeProvider muiTheme={muiTheme}>

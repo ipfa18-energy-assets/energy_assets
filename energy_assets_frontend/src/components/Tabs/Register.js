@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { Link } from 'react-router-dom';
-import web3 from '../BlockchainWrappers/Web3';
 import contract from '../BlockchainWrappers/Abi';
 
 
@@ -33,12 +31,12 @@ const styles = {
 }
 
 
-class UserProfile extends Component {
+class Register extends Component {
   state = {
-    address: this.props.address,
-    creditBalance: Number(contract.getCreditBalance({from: this.props.address})),
-    etherBalance: Number(web3.eth.getBalance(this.props.address)),
-    utilityCompany: "FF"
+    address: "",
+    accounType: 0,
+    userAddress: "",
+    ucAddress: ""
   };
 
     handleChange = name => event => {
@@ -46,61 +44,76 @@ class UserProfile extends Component {
        [name]: event.target.value,
      });
    };
+   RegisterAccount = event => {
+     contract.registration(this.state.address, Number(this.state.accountType))
+   }
+   ConnectAccount = event => {
+     contract.userRegistration(this.state.userAddress, "0x495434120677e9049d03ad9fcb045925694b00fd", {from: this.props.ucAddress}) //Random address for oracle because idk
+   }
 
 
   render() {
-    console.log(contract.getCreditBalance({from: this.props.address}))
-    const { classes, action } = this.props;
-    const { address } = this.state
-
+    const { classes } = this.props;
     return (
+      <div>
         <div className = {classes.userProf}>
+          Register UC or FFG
           <div>
             <TextField
               label="Address"
               className={classes.textField}
-              value={address}
+              value={this.state.address}
+              onChange={this.handleChange('address')}
               margin="normal"
               variant="outlined"
             />
           </div>
           <div>
             <TextField
-              label="Credit Balance"
+              label="Type of Account"
               className={classes.textField}
-              value={this.state.creditBalance}
-              onChange={this.handleChange('creditBalance')}
+              value={this.state.accountType}
+              onChange={this.handleChange('accountType')}
+              margin="normal"
+              variant="outlined"
+            />
+          </div>
+          <div>
+            <div>
+              <Button variant="contained" className = {classes.continueButton} onClick = {this.RegisterAccount}>
+                Register
+              </Button>
+            </div>
+          </div>
+        </div>
+        <div className = {classes.userProf}>
+          Connect User to UC
+          <div>
+            <TextField
+              label="User Address"
+              className={classes.textField}
+              value={this.state.userAddress}
+              onChange={this.handleChange('userAddress')}
               margin="normal"
               variant="outlined"
             />
           </div>
           <div>
             <TextField
-              label="Utility Company"
+              label="UC Address"
               className={classes.textField}
-              value={this.state.utilityCompany}
+              value={this.state.ucAddress}
+              onChange={this.handleChange('ucAddress')}
               margin="normal"
               variant="outlined"
             />
           </div>
           <div>
-            <TextField
-              label="Ether Balance"
-              className={classes.textField}
-              value={this.state.etherBalance}
-              onChange={this.handleChange('etherBalance')}
-              margin="normal"
-              variant="outlined"
-            />
-          </div>
-        <div>
-          <div>
-            <Button color="inherit" className = {classes.button} component={Link} to={{ pathname: "/EthereumTradingCard", state: { transaction: {action}, address: address}}}>
-              {action}
-            </Button>
-            <Button className = {classes.button} color="inherit" component={Link} to="/">
-              Home
-            </Button>
+            <div>
+              <Button variant="contained" className = {classes.continueButton} onClick = {this.ConnectAccount}>
+                Connect
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -108,4 +121,4 @@ class UserProfile extends Component {
   }
 }
 
-export default withStyles(styles)(UserProfile);
+export default withStyles(styles)(Register);
