@@ -22,6 +22,30 @@
   color: #61dafb;
 }
 
+.all {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: flex;
+  background: white;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  transition: 0.3s;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.right {
+  text-align: right;
+}
+
+.bg {
+  box-sizing: border-box;
+  padding: 50px;
+  background-color: #dddddd;
+  background-image: linear-gradient(to bottom right, #23d2a7, #d6f2d8);
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
