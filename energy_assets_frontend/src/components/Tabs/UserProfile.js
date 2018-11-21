@@ -4,6 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { Link } from 'react-router-dom';
+import web3 from '../BlockchainWrappers/Web3';
+import contract from '../BlockchainWrappers/Abi';
+
 
 
 
@@ -32,9 +35,9 @@ const styles = {
 
 class UserProfile extends Component {
   state = {
-    Address: "191910239231sda",
-    creditBalance: "1234",
-    etherBalance: "12",
+    Address: this.props.address,
+    creditBalance: contract.getCreditBalance({from: web3.eth.coinbase}),
+    etherBalance: web3.eth.getBalance(web3.eth.coinbase),
     utilityCompany: "FF"
   };
 
@@ -47,21 +50,6 @@ class UserProfile extends Component {
 
   render() {
     const { classes, action } = this.props;
-    let actionButton
-      //We should set the etherbalance to the below:
-      //  web3.eth.getBalance(web3.eth.coinbase, function(err, balance) {
-      //   //this.balance = this.web3.fromWei(balance, "ether") + " ETH"
-      //   console.log(balance.toString())
-      // });
-    if (action === "redeem") {
-      actionButton = (<Button color="inherit" className = {classes.button} component={Link} to={{ pathname: "/EthereumTradingCard", state: { transaction: 'Redeem'} }}>
-                        Redeem
-                      </Button>)
-    } else {
-      actionButton = (<Button color="inherit" className = {classes.button} component={Link} to={{ pathname: "/EthereumTradingCard", state: { transaction: 'Sell'} }}>
-                        Sell
-                      </Button>)
-    }
 
     return (
         <div className = {classes.userProf}>
@@ -105,7 +93,9 @@ class UserProfile extends Component {
           </div>
         <div>
           <div>
-            {actionButton}
+            <Button color="inherit" className = {classes.button} component={Link} to={{ pathname: "/EthereumTradingCard", state: { transaction: {action}}}}>
+              {action}
+            </Button>
             <Button className = {classes.button} color="inherit" component={Link} to="/">
               Home
             </Button>

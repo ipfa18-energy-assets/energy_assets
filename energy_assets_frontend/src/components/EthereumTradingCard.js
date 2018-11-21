@@ -80,7 +80,9 @@ class EthereumTradingCard extends Component {
   state = {
     value: 0.1,
     etherAmount: 1,
-    certificateAmount: 900
+    certificateAmount: 1 * Number(contract.getDollarPerUnitOfCharge()),
+    transactionType: this.props.location.state.transaction.action,
+    dollarPerUnitOfCharge: Number(contract.getDollarPerUnitOfCharge())
   };
 
 
@@ -89,10 +91,11 @@ class EthereumTradingCard extends Component {
   };
 
   handleChangeEther = prop => event => {
-   this.setState({ [prop]: event.target.value, certificateAmount: event.target.value * 900 });
+   this.setState({ [prop]: event.target.value, certificateAmount: event.target.value * this.state.dollarPerUnitOfCharge });
   };
   handleChangeCertificate = prop => event => {
-   this.setState({ [prop]: event.target.value, etherAmount: event.target.value / 900 });
+
+   this.setState({ [prop]: event.target.value, etherAmount: event.target.value / this.state.dollarPerUnitOfCharge });
   };
 
   handleTransaction = event => {
@@ -104,10 +107,7 @@ class EthereumTradingCard extends Component {
 
   render() {
     const { classes } = this.props;
-    const { value, etherAmount } = this.state;
-    const energyCertificate = etherAmount * 900
-    console.log(this.props.location.state)
-
+    const { value, etherAmount, certificateAmount, transactionType, dollarPerUnitOfCharge } = this.state;
     return (
       <Card className = {classes.card}>
           <MuiThemeProvider muiTheme={muiTheme}>
@@ -141,7 +141,7 @@ class EthereumTradingCard extends Component {
           </Card>
           <CardContent className = {classes.conversion}>
             <Typography variant="body1" >
-              For 1 Ether you will get 1 Energy Cerifiicate
+              For 1 Ether you will get {dollarPerUnitOfCharge} Energy Cerifiicate
             </Typography>
           </CardContent>
           <Card className = {classes.etherCard}>
@@ -149,8 +149,8 @@ class EthereumTradingCard extends Component {
                 <FormControl fullWidth error={this.state.isErrorState} >
                   <Input
                     id="adornment-amount"
-                    value={energyCertificate}
-                    onChange={this.handleChangeCertificate('energyCertificate')}
+                    value={certificateAmount}
+                    onChange={this.handleChangeCertificate('certificateAmount')}
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}
                   />
                </FormControl>
@@ -159,7 +159,7 @@ class EthereumTradingCard extends Component {
           </Card>
           <div className = {classes.continueButtonWrapper}>
             <Button variant="contained" className = {classes.continueButton} onClick = {this.handleTransaction}>
-              Continue
+              {transactionType}
             </Button>
           </div>
           </Card>

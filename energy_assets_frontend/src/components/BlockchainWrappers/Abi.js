@@ -77,6 +77,20 @@ let abi = [
 		"type": "function"
 	},
 	{
+		"constant": true,
+		"inputs": [],
+		"name": "getUSDperETH",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"constant": false,
 		"inputs": [
 			{
@@ -114,22 +128,22 @@ let abi = [
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"constant": false,
 		"inputs": [
 			{
-				"name": "user",
-				"type": "address"
-			}
-		],
-		"name": "getUserBalance",
-		"outputs": [
-			{
-				"name": "",
+				"name": "newPrice",
 				"type": "uint256"
 			}
 		],
+		"name": "changeCreditPrice",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"payable": false,
-		"stateMutability": "view",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -140,7 +154,7 @@ let abi = [
 				"type": "uint256"
 			}
 		],
-		"name": "changeCreditPrice",
+		"name": "changeETHPrice",
 		"outputs": [
 			{
 				"name": "",
@@ -236,6 +250,20 @@ let abi = [
 		"type": "function"
 	},
 	{
+		"constant": true,
+		"inputs": [],
+		"name": "getDollarPerUnitOfCharge",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"constant": false,
 		"inputs": [
 			{
@@ -263,6 +291,20 @@ let abi = [
 			}
 		],
 		"name": "getAddressTypeOf",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getCreditPerUnitOfCharge",
 		"outputs": [
 			{
 				"name": "",
@@ -312,6 +354,53 @@ let abi = [
 		"type": "function"
 	},
 	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "getUserBalanceOf",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getUserBalance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getWeiPerCredit",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"constant": false,
 		"inputs": [
 			{
@@ -328,6 +417,25 @@ let abi = [
 		],
 		"payable": false,
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "dollar",
+				"type": "uint256"
+			}
+		],
+		"name": "USDtoETH",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -372,6 +480,25 @@ let abi = [
 			}
 		],
 		"name": "getCreditBalanceOf",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "ETHinWei",
+				"type": "uint256"
+			}
+		],
+		"name": "ETHtoUSD",
 		"outputs": [
 			{
 				"name": "",
@@ -511,7 +638,7 @@ let abi = [
 		"type": "fallback"
 	}
 ]
-let address = "0xc6a265f53565fe53a334cb4bad2645d7a9a0b328"
+let address = "0x31d961be23cf126b4cc58b3e0657e99311f1b04e"
 web3.eth.defaultAccount = web3.eth.coinbase
 let abi_contract = web3.eth.contract(abi)
 let addr_contract = abi_contract.at(address)

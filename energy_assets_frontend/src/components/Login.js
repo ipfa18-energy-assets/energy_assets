@@ -51,6 +51,7 @@ class Login extends Component {
     username: "",
     password: "",
     userType: '',
+    error: false
   }
   handleChangeUsername = prop => event => {
    this.setState({ [prop]: event.target.value });
@@ -62,26 +63,28 @@ class Login extends Component {
     this.setState({ userType: event.target.value });
   };
   onSubmit = event => {
-    let userType = contract.getAddressType()
-    if (userType === 1) {
+    this.setState({error: false})
+    const user = this.state.username !== "" ? this.state.username : web3.eth.coinbase
+    const userType = Number(contract.getAddressType({from:user}))
+    console.log(userType)
+    if (userType <= 1) {
       this.setState({userType: "User"})
     } else if (userType === 2) {
       this.setState({userType: "UC"})
-    } else {
+    } else if (userType === 3){
       this.setState({userType: "FFG"})
+    } else {
+      this.setState({error: true})
     }
+
   }
 
   render() {
     const { classes } = this.props
-    const { userType } = this.state
+    const { userType, error } = this.state
 
-    if (userType === 'User') {
-      return <Redirect to='/useraccount' />
-    } else if (userType === 'UC') {
-      return <Redirect to='/ucaccount' />
-    } else if (userType === 'FFG') {
-      return <Redirect to='/ffgaccount' />
+    if (userType !== '') {
+      return <Redirect to={{ pathname: "/account", state: { address: this.state.username !== "" ? this.state.username : web3.eth.coinbase, accountType: userType} }} />
     }
     return (
       <div className={classes.background}>
@@ -100,6 +103,7 @@ class Login extends Component {
                   onChange={this.handleChangeUsername('username')}
                   margin="normal"
                   variant="filled"
+                  error = {error}
                 />
               </div>
               <div>

@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import UserProfile from './AccountComponents/UserProfile'
-import History from './AccountComponents/History'
-import RegisterVE from './AccountComponents/RegisterVE'
+import UserProfile from './Tabs/UserProfile'
+import History from './Tabs/History'
+import RegisterVE from './Tabs/RegisterVE'
+import RegisteredUsers from './Tabs/RegisteredUsers'
 import EthereumTradingCard from './EthereumTradingCard'
 import SplashPage from './SplashPage'
 
@@ -34,11 +35,10 @@ const styles = {
 
 class AccountTemplate extends Component {
   state = {
-    name: "David Chi",
-    creditBalance: "1234",
-    etherBalance: "12",
-    utilityCompany: "FF",
-    currentShownComponent: "UserProfile"
+    currentShownComponent: "UserProfile",
+    accountType: this.props.location.state.accountType,
+    address: this.props.location.state.address
+
   };
 
     handleChange = name => event => {
@@ -50,7 +50,7 @@ class AccountTemplate extends Component {
 
   render() {
     const { classes } = this.props;
-    const { currentShownComponent } = this.state;
+    const { currentShownComponent, accountType, address } = this.state;
     // if (this.props.buttons) {
     //   const buttons = this.props.buttons.map((buttonName) =>
     //     <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange({buttonName})}>
@@ -58,13 +58,59 @@ class AccountTemplate extends Component {
     //     </Button>
     //   )
     // }
+    console.log(accountType)
     var currentState;
+    let accountSideBar
+    if (accountType === 'User') {
+      accountSideBar = (<div className = {classes.menu}>
+                          <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
+                            Profile
+                          </Button>
+                          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("History")}>
+                            History
+                          </Button>
+                          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("RegisterVE")}>
+                            Registered VE
+                          </Button>
+                        </div>)
+    } else if (accountType === 'UC') {
+      accountSideBar = (<div className = {classes.menu}>
+                          <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
+                            Profile
+                          </Button>
+                          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("RegisteredUsers")}>
+                            Registered Users
+                          </Button>
+                        </div>)
+
+    } else {
+      accountSideBar = (<div className = {classes.menu}>
+                          <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
+                            Profile
+                          </Button>
+                          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("History")}>
+                            History
+                          </Button>
+                          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("RegisterVE")}>
+                            Registered VE
+                          </Button>
+                        </div>)
+    }
+
     if (currentShownComponent === "RegisterVE") {
       currentState = (<RegisterVE/>)
     } else if (currentShownComponent === "History") {
       currentState = (<History/>)
     } else if (currentShownComponent === "UserProfile"){
-      currentState = (<UserProfile/>)
+      if (accountType === "User") {
+        currentState = (<UserProfile action={'redeem'} address={address}/>)
+      } else if (accountType === "UC") {
+        currentState = (<UserProfile action={'sell'} address={address}/>)
+      } else {
+        currentState = (<UserProfile action={'buy'} address={address}/>)
+      }
+    } else if (currentShownComponent === "RegisteredUsers") {
+      currentState = (<RegisteredUsers/>)
     }
 
 
