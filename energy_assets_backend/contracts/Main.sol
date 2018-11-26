@@ -261,7 +261,7 @@ contract Main {
     }
     uint amountOfEther = USDtoETH(amountInDollar);
     address utilCompany = utilityCompanyOfUser[msg.sender];
-    if (etherBalances[utilCompany] > amountOfEther) {
+    if (etherBalances[utilCompany] > amountOfEther && balances[msg.sender] >= amountInDollar) {
       etherBalances[utilCompany] -= amountOfEther;
       balances[msg.sender] -= amountInDollar;
       msg.sender.transfer(amountOfEther);
@@ -310,7 +310,7 @@ contract Main {
     return balances[user];
   }
 
-  function getUserUtilityCompany(address user) public view
+  function getUserUtilityCompanyOf(address user) public view
     _is(authorizedToViewUserData) returns (address) {
     return utilityCompanyOfUser[user];
   }
@@ -334,6 +334,10 @@ contract Main {
 
   function getUserBalance() public view returns (uint) {
     return balances[msg.sender];
+  }
+
+  function getUserUtilityCompany() public view returns (address) {
+    return utilityCompanyOfUser[msg.sender];
   }
 
   function getCreditBalance() public view returns (uint) {
