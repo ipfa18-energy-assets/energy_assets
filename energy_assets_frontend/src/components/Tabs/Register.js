@@ -51,6 +51,16 @@ class Register extends Component {
    ConnectAccount = event => {
      contract.userRegistration(this.state.userAddress, "0xe6828b402729f6c8ac3c38be82c389af14379d7b", {from: this.state.ucAddress, gas:3000000}) //Random address for oracle because idk, magic number on gas because idk
    }
+   standardRegistration = event => {
+     web3.eth.getAccounts(function(err, result) {
+       contract.registration(result[1], 2)
+       contract.registration(result[2], 2)
+       contract.registration(result[3], 3)
+       contract.registration(result[4], 3)
+       contract.userRegistration(result[5], result[8], {from: result[1], gas:3000000}) //magic number on gas because idk
+       contract.userRegistration(result[6], result[9], {from: result[2], gas:3000000}) //magic number on gas because idk
+     })
+   }
 
 
   render() {
@@ -113,6 +123,13 @@ class Register extends Component {
             <div>
               <Button variant="contained" className = {classes.continueButton} onClick = {this.ConnectAccount}>
                 Connect
+              </Button>
+            </div>
+          </div>
+          <div>
+            <div>
+              <Button variant="contained" className = {classes.continueButton} onClick = {this.standardRegistration}>
+                Standard Setup
               </Button>
             </div>
           </div>
