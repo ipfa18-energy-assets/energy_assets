@@ -66,7 +66,7 @@ class Login extends Component {
     this.setState({error: false})
     const user = this.state.username !== "" ? this.state.username : web3.eth.coinbase
     const userType = Number(contract.getAddressType({from:user}))
-    console.log(userType)
+    console.log("User Type:" + userType)
     if (userType <= 1) {
       this.setState({userType: "User"})
     } else if (userType === 2) {

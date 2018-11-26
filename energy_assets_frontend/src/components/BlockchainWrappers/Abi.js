@@ -638,7 +638,7 @@ let abi = [
 		"type": "fallback"
 	}
 ]
-let address = "0x31d961be23cf126b4cc58b3e0657e99311f1b04e"
+let address = "0x009f5db8fe4cadd75599d09f0e75872767c09379"
 web3.eth.defaultAccount = web3.eth.coinbase
 let abi_contract = web3.eth.contract(abi)
 let addr_contract = abi_contract.at(address)

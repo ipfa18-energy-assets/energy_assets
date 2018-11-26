@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import contract from '../BlockchainWrappers/Abi';
+import web3 from '../BlockchainWrappers/Web3';
 
 
 
@@ -48,7 +49,7 @@ class Register extends Component {
      contract.registration(this.state.address, Number(this.state.accountType))
    }
    ConnectAccount = event => {
-     contract.userRegistration(this.state.userAddress, "0x495434120677e9049d03ad9fcb045925694b00fd", {from: this.props.ucAddress}) //Random address for oracle because idk
+     contract.userRegistration(this.state.userAddress, "0xe6828b402729f6c8ac3c38be82c389af14379d7b", {from: this.state.ucAddress, gas:3000000}) //Random address for oracle because idk, magic number on gas because idk
    }
 
 

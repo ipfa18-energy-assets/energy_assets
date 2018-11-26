@@ -49,8 +49,8 @@ class UserProfile extends Component {
 
 
   render() {
-    console.log(contract.getCreditBalance({from: this.props.address}))
-    const { classes, action } = this.props;
+    console.log("Account Balance for " + this.props.address + " is " + Number(contract.getCreditBalance({from: this.props.address})))
+    const { classes, action, accountType } = this.props;
     const { address } = this.state
 
     return (
@@ -95,7 +95,7 @@ class UserProfile extends Component {
           </div>
         <div>
           <div>
-            <Button color="inherit" className = {classes.button} component={Link} to={{ pathname: "/EthereumTradingCard", state: { transaction: {action}, address: address}}}>
+            <Button color="inherit" className = {classes.button} component={Link} to={{ pathname: "/EthereumTradingCard", state: { transaction: {action}, address: address, accountType: accountType}}}>
               {action}
             </Button>
             <Button className = {classes.button} color="inherit" component={Link} to="/">

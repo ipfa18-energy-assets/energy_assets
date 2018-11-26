@@ -111,7 +111,7 @@ class EthereumTradingCard extends Component {
     } else if (transactionType === "sell") {
       contract.sell(certificateAmount, {from: address})
     } else if (transactionType === "redeem") {
-      contract.chargeCompleted(certificateAmount, {from: address})
+      contract.chargeCompleted(certificateAmount, {from: "0xe6828b402729f6c8ac3c38be82c389af14379d7b"})
     }
     this.setState({transactionDone: true})
 

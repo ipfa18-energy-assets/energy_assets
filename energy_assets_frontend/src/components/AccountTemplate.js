@@ -6,6 +6,7 @@ import UserProfile from './Tabs/UserProfile'
 import History from './Tabs/History'
 import RegisterVE from './Tabs/RegisterVE'
 import RegisteredUsers from './Tabs/RegisteredUsers'
+import contract from './BlockchainWrappers/Abi';
 
 
 const styles = {
@@ -44,13 +45,17 @@ class AccountTemplate extends Component {
        currentShownComponent: name,
      });
    };
+   deposit100  = () => {
+     contract.etherDeposit({from: this.state.address, gas: 3000000, value: 100})
+   }
 
 
   render() {
     const { classes } = this.props;
     const { currentShownComponent, accountType, address } = this.state;
-    var currentState
+    let currentState
     let accountSideBar
+    let etherDeposit
     if (accountType === 'User') {
       accountSideBar = (<div className = {classes.menu}>
                           <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
@@ -73,6 +78,7 @@ class AccountTemplate extends Component {
                           </Button>
                         </div>)
 
+
     } else {
       accountSideBar = (<div className = {classes.menu}>
                           <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
@@ -85,6 +91,9 @@ class AccountTemplate extends Component {
                             Registered VE
                           </Button>
                         </div>)
+      etherDeposit = (<Button   onClick = {this.deposit100}>
+                        Deposit Ether
+                      </Button>)
     }
 
     if (currentShownComponent === "RegisterVE") {
@@ -108,9 +117,10 @@ class AccountTemplate extends Component {
       <div className = {classes.background}>
         {accountSideBar}
         <div>
-          UserProfile
+          {accountType}Profile
         </div>
         {currentState}
+        {etherDeposit}
       </div>
     );
   }
