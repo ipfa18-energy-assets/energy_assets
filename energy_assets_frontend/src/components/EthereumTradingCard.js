@@ -12,6 +12,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Dropdown from './Dropdown'
+import contract from './BlockchainWrappers/Abi'
+import { Redirect } from 'react-router-dom'
+
 
 
 const styles = {
@@ -74,11 +77,16 @@ const muiTheme = getMuiTheme({
 });
 
 
-class Login extends Component {
+class EthereumTradingCard extends Component {
   state = {
     value: 0.1,
     etherAmount: 1,
-    energyCertificate: 1
+    certificateAmount: 1 * Number(contract.getDollarPerUnitOfCharge()),
+    transactionType: this.props.location.state.transaction.action,
+    dollarPerUnitOfCharge: Number(contract.getDollarPerUnitOfCharge()),
+    address: this.props.location.state.address,
+    accountType: this.props.location.state.accountType,
+    transactionDone: false
   };
 
 
@@ -87,13 +95,34 @@ class Login extends Component {
   };
 
   handleChangeEther = prop => event => {
-   this.setState({ [prop]: event.target.value });
+   this.setState({ [prop]: event.target.value, certificateAmount: event.target.value * this.state.dollarPerUnitOfCharge });
   };
+  handleChangeCertificate = prop => event => {
+   this.setState({ [prop]: event.target.value, etherAmount: event.target.value / this.state.dollarPerUnitOfCharge });
+  };
+
+  handleTransaction = event => {
+    const address = this.state.address
+    const transactionType = this.state.transactionType
+    const certificateAmount = this.state.certificateAmount
+
+    if (transactionType === "buy") {
+      contract.buy(certificateAmount, {from: address})
+    } else if (transactionType === "sell") {
+      contract.sell(certificateAmount, {from: address})
+    } else if (transactionType === "redeem") {
+      contract.chargeCompleted(certificateAmount, {from: "0xe6828b402729f6c8ac3c38be82c389af14379d7b"})
+    }
+    this.setState({transactionDone: true})
+
+  }
 
   render() {
     const { classes } = this.props;
-    const { value } = this.state;
-
+    const { value, etherAmount, certificateAmount, transactionType, dollarPerUnitOfCharge, transactionDone, accountType} = this.state;
+    if (transactionDone) {
+      return <Redirect to={{ pathname: "/account", state: { address: this.state.address, accountType: accountType} }} />
+    }
     return (
       <Card className = {classes.card}>
           <MuiThemeProvider muiTheme={muiTheme}>
@@ -117,7 +146,7 @@ class Login extends Component {
                 <FormControl fullWidth error={this.state.isErrorState} >
                   <Input
                     id="adornment-amount"
-                    value={this.state.etherAmount}
+                    value={etherAmount}
                     onChange={this.handleChangeEther('etherAmount')}
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}
                   />
@@ -127,7 +156,7 @@ class Login extends Component {
           </Card>
           <CardContent className = {classes.conversion}>
             <Typography variant="body1" >
-              For 1 Ether you will get 1 Energy Cerifiicate
+              For 1 Ether you will get {dollarPerUnitOfCharge} Energy Cerifiicate
             </Typography>
           </CardContent>
           <Card className = {classes.etherCard}>
@@ -135,8 +164,8 @@ class Login extends Component {
                 <FormControl fullWidth error={this.state.isErrorState} >
                   <Input
                     id="adornment-amount"
-                    value={this.state.etherAmount}
-                    onChange={this.handleChangeEther('etherAmount')}
+                    value={certificateAmount}
+                    onChange={this.handleChangeCertificate('certificateAmount')}
                     startAdornment={<InputAdornment position="start">$</InputAdornment>}
                   />
                </FormControl>
@@ -144,8 +173,8 @@ class Login extends Component {
               <Dropdown menuItems = {["REC", "LCFS", "LMNOP"]}/>
           </Card>
           <div className = {classes.continueButtonWrapper}>
-            <Button variant="contained" className = {classes.continueButton}>
-              Continue
+            <Button variant="contained" className = {classes.continueButton} onClick = {this.handleTransaction}>
+              {transactionType}
             </Button>
           </div>
           </Card>
@@ -153,4 +182,4 @@ class Login extends Component {
     );
   }
 }
-export default withStyles(styles)(Login);
+export default withStyles(styles)(EthereumTradingCard);

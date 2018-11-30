@@ -3,6 +3,10 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import { Link } from 'react-router-dom';
+import web3 from '../BlockchainWrappers/Web3';
+import contract from '../BlockchainWrappers/Abi';
+
 
 
 
@@ -31,9 +35,9 @@ const styles = {
 
 class UserProfile extends Component {
   state = {
-    name: "David Chi",
-    creditBalance: "1234",
-    etherBalance: "12",
+    address: this.props.address,
+    creditBalance: Number(contract.getCreditBalance({from: this.props.address})),
+    etherBalance: Number(web3.eth.getBalance(this.props.address)),
     utilityCompany: "FF"
   };
 
@@ -45,16 +49,17 @@ class UserProfile extends Component {
 
 
   render() {
-    const { classes } = this.props;
+    console.log("Account Balance for " + this.props.address + " is " + Number(contract.getCreditBalance({from: this.props.address})))
+    const { classes, action, accountType } = this.props;
+    const { address } = this.state
 
     return (
         <div className = {classes.userProf}>
           <div>
             <TextField
-              label="Name"
+              label="Address"
               className={classes.textField}
-              value={this.state.name}
-              onChange={this.handleChange('name')}
+              value={address}
               margin="normal"
               variant="outlined"
             />
@@ -74,7 +79,6 @@ class UserProfile extends Component {
               label="Utility Company"
               className={classes.textField}
               value={this.state.utilityCompany}
-              onChange={this.handleChange('utilityCompany')}
               margin="normal"
               variant="outlined"
             />
@@ -91,10 +95,10 @@ class UserProfile extends Component {
           </div>
         <div>
           <div>
-            <Button variant="contained" className = {classes.button}>
-              Redeem
+            <Button color="inherit" className = {classes.button} component={Link} to={{ pathname: "/EthereumTradingCard", state: { transaction: {action}, address: address, accountType: accountType}}}>
+              {action}
             </Button>
-            <Button variant="contained" className = {classes.button}>
+            <Button className = {classes.button} color="inherit" component={Link} to="/">
               Home
             </Button>
           </div>
@@ -103,4 +107,5 @@ class UserProfile extends Component {
     );
   }
 }
+
 export default withStyles(styles)(UserProfile);

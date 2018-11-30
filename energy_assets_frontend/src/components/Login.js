@@ -4,18 +4,17 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import { Link } from 'react-router-dom';
+import web3 from './BlockchainWrappers/Web3';
+import contract from './BlockchainWrappers/Abi'
+import { Redirect } from 'react-router-dom'
+
 
 const styles = {
   background: {
     width: "100%",
     height: "80%",
     position: "absolute",
-    background: "-webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(30,214,128,1)), color-stop(100%, rgba(23,173,60,1)))", /* safari4+,chrome */
+    background: "linear-gradient(-180deg, #2D61D1 0%, #0FA8A4 81%)", /* safari4+,chrome */
     filter: "progid:DXImageTransform.Microsoft.gradient( startColorstr='#1ED680', endColorstr='#17AD3C',GradientType=1 )" /* ie6-9 */
   },
   topText: {
@@ -51,7 +50,8 @@ class Login extends Component {
   state = {
     username: "",
     password: "",
-    userType: 'User',
+    userType: '',
+    error: false
   }
   handleChangeUsername = prop => event => {
    this.setState({ [prop]: event.target.value });
@@ -61,11 +61,31 @@ class Login extends Component {
   };
   handleChangeUserType = event => {
     this.setState({ userType: event.target.value });
-    this.setState({ extension: '/account' + this.userType });
   };
+  onSubmit = event => {
+    this.setState({error: false})
+    const user = this.state.username !== "" ? this.state.username : web3.eth.coinbase
+    const userType = Number(contract.getAddressType({from:user}))
+    console.log("User Type:" + userType)
+    if (userType <= 1) {
+      this.setState({userType: "User"})
+    } else if (userType === 2) {
+      this.setState({userType: "UC"})
+    } else if (userType === 3){
+      this.setState({userType: "FFG"})
+    } else {
+      this.setState({error: true})
+    }
+
+  }
 
   render() {
     const { classes } = this.props
+    const { userType, error } = this.state
+
+    if (userType !== '') {
+      return <Redirect to={{ pathname: "/account", state: { address: this.state.username !== "" ? this.state.username : web3.eth.coinbase, accountType: userType} }} />
+    }
     return (
       <div className={classes.background}>
         <div className = {classes.mainCardWrapper}>
@@ -74,18 +94,6 @@ class Login extends Component {
               SIGN INTO YOUR ACCOUNT
             </Typography>
             <div className = {classes.accountTypes}>
-            <FormControl component="fieldset" className={classes.formControl}>
-              <RadioGroup
-                className={classes.group}
-                value={this.state.userType}
-                onChange={this.handleChangeUserType}
-                row
-              >
-                <FormControlLabel value="User" control={<Radio />} label="User" />
-                <FormControlLabel value="UC" control={<Radio />} label="UC" />
-                <FormControlLabel value="FFGs" control={<Radio />} label="FFGs" />
-              </RadioGroup>
-            </FormControl>
             </div>
             <div className = {classes.inputs}>
               <div>
@@ -95,6 +103,7 @@ class Login extends Component {
                   onChange={this.handleChangeUsername('username')}
                   margin="normal"
                   variant="filled"
+                  error = {error}
                 />
               </div>
               <div>
@@ -108,10 +117,10 @@ class Login extends Component {
              </div>
            </div>
             <div className = {classes.signInButtonWrapper}>
-              <Button className = {classes.signInButton} color="inherit" component={Link} to="/account">
-                  Continue
-              </Button>
-            </div>
+              <Button className = {classes.signInButton} color="inherit" onClick={this.onSubmit}>
+                    Continue
+                    </Button>
+              </div>
           </Card >
         </div>
       </div>
