@@ -3,8 +3,10 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import EthereumTradingCard from '../../EthereumTradingCard';
 import { Link } from 'react-router-dom';
+import web3 from '../BlockchainWrappers/Web3';
+import contract from '../BlockchainWrappers/Abi';
+
 
 
 
@@ -33,9 +35,9 @@ const styles = {
 
 class UserProfile extends Component {
   state = {
-    Address: "191910239231sda",
-    creditBalance: "1234",
-    etherBalance: "12",
+    address: this.props.address,
+    creditBalance: Number(contract.getCreditBalance({from: this.props.address})),
+    etherBalance: Number(web3.eth.getBalance(this.props.address)),
     utilityCompany: "FF"
   };
 
@@ -47,17 +49,9 @@ class UserProfile extends Component {
 
 
   render() {
-    const { classes, action } = this.props;
-    let actionButton
-    if (action == "redeem") {
-      actionButton = (<Button variant="contained" className = {classes.button}>
-                        Redeem
-                      </Button>)
-    } else {
-      actionButton = (<Button variant="contained" className = {classes.button}>
-                        Sell
-                      </Button>)
-    }
+    console.log("Account Balance for " + this.props.address + " is " + Number(contract.getCreditBalance({from: this.props.address})))
+    const { classes, action, accountType } = this.props;
+    const { address } = this.state
 
     return (
         <div className = {classes.userProf}>
@@ -65,7 +59,7 @@ class UserProfile extends Component {
             <TextField
               label="Address"
               className={classes.textField}
-              value={this.state.Address}
+              value={address}
               margin="normal"
               variant="outlined"
             />
@@ -101,8 +95,8 @@ class UserProfile extends Component {
           </div>
         <div>
           <div>
-            <Button className = {classes.button} color="inherit" component={Link} to="/EthereumTradingCard">
-              Redeem
+            <Button color="inherit" className = {classes.button} component={Link} to={{ pathname: "/EthereumTradingCard", state: { transaction: {action}, address: address, accountType: accountType}}}>
+              {action}
             </Button>
             <Button className = {classes.button} color="inherit" component={Link} to="/">
               Home

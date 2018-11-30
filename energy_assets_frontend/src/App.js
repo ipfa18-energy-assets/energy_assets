@@ -4,9 +4,9 @@ import { Switch, Route } from 'react-router-dom'
 import SplashPage from './components/SplashPage'
 import Login from './components/Login'
 import Tradeing from './components/EthereumTradingCard'
-import UserAccount from './components/AccountComponents/UserAccount'
-import UCAccount from './components/AccountComponents/UCAccount'
-import FFGAccount from './components/AccountComponents/FFGAccount'
+import Account from './components/AccountTemplate'
+import Register from './components/Tabs/Register'
+
 
 class App extends Component {
     render() {
@@ -16,9 +16,9 @@ class App extends Component {
                 <Route exact path='/' component={SplashPage}/>
                 <Route exact path='/login' component={Login}/>
                 <Route exact path='/EthereumTradingCard' component= {Tradeing}/>
-                <Route exact path='/useraccount' component={UserAccount}/>
-                <Route exact path='/ucaccount' component={UCAccount}/>
-                <Route exact path='/ffgaccount' component={FFGAccount}/>
+                <Route exact path='/account' component={Account}/>
+                <Route exact path='/register' component={Register}/>
+
               </Switch>
             </div>
         );

@@ -4,14 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import { Link } from 'react-router-dom';
 import web3 from './BlockchainWrappers/Web3';
-import compose from 'recompose/compose';
-import abi from './BlockchainWrappers/Abi'
+import contract from './BlockchainWrappers/Abi'
 import { Redirect } from 'react-router-dom'
 
 
@@ -57,6 +51,7 @@ class Login extends Component {
     username: "",
     password: "",
     userType: '',
+    error: false
   }
   handleChangeUsername = prop => event => {
    this.setState({ [prop]: event.target.value });
@@ -68,32 +63,28 @@ class Login extends Component {
     this.setState({ userType: event.target.value });
   };
   onSubmit = event => {
-    var self = this
-    web3.eth.defaultAccount = web3.eth.coinbase
-    let abi_contract = web3.eth.contract(abi)
-    let addr_contract = abi_contract.at("0xd7e3c1741fd42562af1532a44409945b8342809d")
-    let userType = addr_contract.getAddressType()
-    if (userType == 1) {
-      self.setState({userType: "User"})
-    } else if (userType == 2) {
-      self.setState({userType: "UC"})
+    this.setState({error: false})
+    const user = this.state.username !== "" ? this.state.username : web3.eth.coinbase
+    const userType = Number(contract.getAddressType({from:user}))
+    console.log("User Type:" + userType)
+    if (userType <= 1) {
+      this.setState({userType: "User"})
+    } else if (userType === 2) {
+      this.setState({userType: "UC"})
+    } else if (userType === 3){
+      this.setState({userType: "FFG"})
     } else {
-      self.setState({userType: "FFG"})
+      this.setState({error: true})
     }
+
   }
 
   render() {
     const { classes } = this.props
-    const { userType } = this.state
+    const { userType, error } = this.state
 
-    let signInButton
-
-    if (userType == 'User') {
-      return <Redirect to='/useraccount' />
-    } else if (userType == 'UC') {
-      return <Redirect to='/ucaccount' />
-    } else if (userType == 'FFG') {
-      return <Redirect to='/ffgaccount' />
+    if (userType !== '') {
+      return <Redirect to={{ pathname: "/account", state: { address: this.state.username !== "" ? this.state.username : web3.eth.coinbase, accountType: userType} }} />
     }
     return (
       <div className={classes.background}>
@@ -112,6 +103,7 @@ class Login extends Component {
                   onChange={this.handleChangeUsername('username')}
                   margin="normal"
                   variant="filled"
+                  error = {error}
                 />
               </div>
               <div>

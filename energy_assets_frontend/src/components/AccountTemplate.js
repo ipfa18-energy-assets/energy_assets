@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import UserProfile from './AccountComponents/UserProfile'
-import History from './AccountComponents/History'
-import RegisterVE from './AccountComponents/RegisterVE'
-import EthereumTradingCard from './EthereumTradingCard'
-import SplashPage from './SplashPage'
+import UserProfile from './Tabs/UserProfile'
+import History from './Tabs/History'
+import RegisterVE from './Tabs/RegisterVE'
+import RegisteredUsers from './Tabs/RegisteredUsers'
+import contract from './BlockchainWrappers/Abi';
 
 
 const styles = {
@@ -34,11 +34,10 @@ const styles = {
 
 class AccountTemplate extends Component {
   state = {
-    name: "David Chi",
-    creditBalance: "1234",
-    etherBalance: "12",
-    utilityCompany: "FF",
-    currentShownComponent: "UserProfile"
+    currentShownComponent: "UserProfile",
+    accountType: this.props.location.state.accountType,
+    address: this.props.location.state.address
+
   };
 
     handleChange = name => event => {
@@ -46,45 +45,82 @@ class AccountTemplate extends Component {
        currentShownComponent: name,
      });
    };
+   deposit100  = () => {
+     contract.etherDeposit({from: this.state.address, gas: 3000000, value: 100})
+   }
 
 
   render() {
     const { classes } = this.props;
-    const { currentShownComponent } = this.state;
-    // if (this.props.buttons) {
-    //   const buttons = this.props.buttons.map((buttonName) =>
-    //     <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange({buttonName})}>
-    //       {buttonName}
-    //     </Button>
-    //   )
-    // }
-    var currentState;
+    const { currentShownComponent, accountType, address } = this.state;
+    let currentState
+    let accountSideBar
+    let etherDeposit
+    if (accountType === 'User') {
+      accountSideBar = (<div className = {classes.menu}>
+                          <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
+                            Profile
+                          </Button>
+                          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("History")}>
+                            History
+                          </Button>
+                          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("RegisterVE")}>
+                            Registered VE
+                          </Button>
+                        </div>)
+    } else if (accountType === 'UC') {
+      accountSideBar = (<div className = {classes.menu}>
+                          <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
+                            Profile
+                          </Button>
+                          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("RegisteredUsers")}>
+                            Registered Users
+                          </Button>
+                        </div>)
+
+
+    } else {
+      accountSideBar = (<div className = {classes.menu}>
+                          <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
+                            Profile
+                          </Button>
+                          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("History")}>
+                            History
+                          </Button>
+                          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("RegisterVE")}>
+                            Registered VE
+                          </Button>
+                        </div>)
+      etherDeposit = (<Button   onClick = {this.deposit100}>
+                        Deposit Ether
+                      </Button>)
+    }
+
     if (currentShownComponent === "RegisterVE") {
       currentState = (<RegisterVE/>)
     } else if (currentShownComponent === "History") {
       currentState = (<History/>)
     } else if (currentShownComponent === "UserProfile"){
-      currentState = (<UserProfile/>)
+      if (accountType === "User") {
+        currentState = (<UserProfile action={'redeem'} address={address} accountType={accountType}/>)
+      } else if (accountType === "UC") {
+        currentState = (<UserProfile action={'sell'} address={address} accountType={accountType}/>)
+      } else {
+        currentState = (<UserProfile action={'buy'} address={address} accountType={accountType}/>)
+      }
+    } else if (currentShownComponent === "RegisteredUsers") {
+      currentState = (<RegisteredUsers/>)
     }
 
 
     return (
       <div className = {classes.background}>
-        <div className = {classes.menu}>
-          <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
-            Profile
-          </Button>
-          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("History")}>
-            History
-          </Button>
-          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("RegisterVE")}>
-            Registered VE
-          </Button>
-        </div>
+        {accountSideBar}
         <div>
-          UserProfile
+          {accountType}Profile
         </div>
         {currentState}
+        {etherDeposit}
       </div>
     );
   }
