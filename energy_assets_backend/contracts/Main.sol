@@ -1,36 +1,23 @@
 pragma solidity ^0.4.24;
 
-/* Documentation found here https://fiatcontract.com/ */
-contract FiatContract {
-  function ETH(uint _id) constant public returns (uint256);
-  function USD(uint _id) constant public returns (uint256);
-  function updatedAt(uint _id) constant public returns (uint);
-}
-
 contract Main {
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   *  ==============================INIT=============================
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-  uint creditPerUnitOfCharge = 1;
-  uint dollarPerUnitOfCharge = 900; // How much users get when they finish charging
-  uint weiPerCredit = 1000; // How much each credit is sold for
-  FiatContract currencyConverter = FiatContract(0x2CDe56E5c8235D6360CCbb0c57Ce248Ca9C80909);
-  // MAINNET address: 0x8055d0504666e2B6942BeB8D6014c964658Ca591
-  // TESTNET address (Ropsten): 0x2CDe56E5c8235D6360CCbb0c57Ce248Ca9C80909
+  uint256 creditPerUnitOfCharge = 1;
+  uint256 dollarPerUnitOfCharge = 9; // How much users get when they finish charging
+  uint256 weiPerCredit = 1 ether; // How much each credit is sold for
+  uint256 USDperETH = 179;
+  uint256 weiPerETH = 1e18;
 
-  function USDtoETH(uint dollar) constant private returns (uint) {
-    // returns $0.01 ETH wei
-    uint256 ethCent = currencyConverter.USD(0);
-    // $0.01 * 100 * USD = USD * $1.00
-    return ethCent * 100 * dollar;
+  function USDtoETH(uint256 dollar) constant public returns (uint256) {
+    return dollar * weiPerETH / USDperETH;
   }
 
-  function ETHtoUSD(uint ETHinWei) constant private returns (uint) {
-    // returns $0.01 ETH wei
-    uint256 ethCent = currencyConverter.USD(0);
-    return ETHinWei / ethCent * 100;
+  function ETHtoUSD(uint256 ETHinWei) constant public returns (uint256) {
+    return ETHinWei * USDperETH / weiPerETH ;
   }
 
   /* Keeps track of credits of approved regulated parties
@@ -140,19 +127,24 @@ contract Main {
   *  =================CHANGE VARIABLES W/ ACCESS====================
   *  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-  function changeCreditRate(uint newCreditRate) public
+  function changeCreditRate(uint256 newCreditRate) public
     _is(authorizedToChangeRates) returns (bool){
     creditPerUnitOfCharge = newCreditRate;
   }
 
-  function changeUnitRate(uint newDollarRate) public
+  function changeUnitRate(uint256 newDollarRate) public
     _is(authorizedToChangeRates) returns (bool){
     dollarPerUnitOfCharge = newDollarRate;
   }
 
-  function changeCreditPrice(uint newPrice) public
+  function changeCreditPrice(uint256 newPrice) public
     _is(authorizedToChangeRates) returns (bool){
     weiPerCredit = newPrice;
+  }
+
+  function changeETHPrice(uint256 newPrice) public
+    _is(authorizedToChangeRates) returns (bool){
+    USDperETH = newPrice;
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -161,7 +153,7 @@ contract Main {
 
   /* Not implemented: charge history of users */
 
-  function chargeCompleted(uint amountInUnit)
+  function chargeCompleted(uint256 amountInUnit)
     public _is(authorizedOracle) returns (bool){
     if (ownerOfOracle[msg.sender] == 0x0) {
       return false;
@@ -262,14 +254,15 @@ contract Main {
 
   /* Converts the amountInDollar to ether (wei) at the current exchange
   rate and withdraw ether from user's corresponding utility company */
-  function userWithdrawal(uint amountInDollar) public returns(bool) {
+  function userWithdrawal(uint amountInDollar) public returns (bool) {
     if (addressType[msg.sender] != 1) {
       return false;
     }
     uint amountOfEther = USDtoETH(amountInDollar);
     address utilCompany = utilityCompanyOfUser[msg.sender];
-    if (etherBalances[utilCompany] > amountOfEther) {
+    if (etherBalances[utilCompany] > amountOfEther && balances[msg.sender] >= amountInDollar) {
       etherBalances[utilCompany] -= amountOfEther;
+      balances[msg.sender] -= amountInDollar;
       msg.sender.transfer(amountOfEther);
       return true;
     } else {
@@ -311,12 +304,12 @@ contract Main {
   can be acquired from mapping addressType[] */
 
   /* Get dollar amount of vehicle owners */
-  function getUserBalance(address user) public view
+  function getUserBalanceOf(address user) public view
     _is(authorizedToViewUserData) returns (uint) {
     return balances[user];
   }
 
-  function getUserUtilityCompany(address user) public view
+  function getUserUtilityCompanyOf(address user) public view
     _is(authorizedToViewUserData) returns (address) {
     return utilityCompanyOfUser[user];
   }
@@ -336,6 +329,16 @@ contract Main {
     return addressType[addr];
   }
 
+  // viewing data of msg.sender only
+
+  function getUserBalance() public view returns (uint) {
+    return balances[msg.sender];
+  }
+
+  function getUserUtilityCompany() public view returns (address) {
+    return utilityCompanyOfUser[msg.sender];
+  }
+
   function getCreditBalance() public view returns (uint) {
     return credits[msg.sender];
   }
@@ -346,6 +349,24 @@ contract Main {
 
   function getAddressType() public view returns (uint) {
     return addressType[msg.sender];
+  }
+
+  // get prices
+
+  function getCreditPerUnitOfCharge() public view returns (uint256) {
+    return creditPerUnitOfCharge;
+  }
+
+  function getDollarPerUnitOfCharge() public view returns (uint256) {
+    return dollarPerUnitOfCharge;
+  }
+
+  function getWeiPerCredit() public view returns (uint256) {
+    return weiPerCredit;
+  }
+
+  function getUSDperETH() public view returns (uint256) {
+    return USDperETH;
   }
 
   /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
