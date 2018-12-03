@@ -7,25 +7,46 @@ import SplashPage from '../SplashPage'
 import UserProfile from './Tabs/UserProfile'
 import History from './Tabs/History'
 import RegisterVE from './Tabs/RegisterVE'
-
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
+import InboxIcon from '@material-ui/icons/Inbox';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import AssignemntIcon from '@material-ui/icons/Assignment';
+import HistoryIcon from '@material-ui/icons/History';
+import CarIcon from '@material-ui/icons/DirectionsCar';
 
 const styles = {
   menu: {
     float: "left",
     background: "-webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(18,53,255,1)), color-stop(100%, rgba(20,255,255,1)))", /* safari4+,chrome */
-    width: "10%",
-    height: "100%",
+    width: "15%",
+    height: "82%",
+    position: "absolute", 
+    marginLeft: "400px", 
   },
   background: {
     width: "100%",
     height: "80%",
     position: "absolute",
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
   },
   sideButton: {
     color: "white"
   },
   button: {
+    width: "100%",
     background: "aqua"
+  },
+  profile: {
+    paddingTop: "20px",
+    display: 'flex',
+    justifyContent: 'space-evenly'
   }
 
 
@@ -46,7 +67,6 @@ class UserAccount extends Component {
        currentShownComponent: name,
      });
    };
-
 
   render() {
     const { classes } = this.props;
@@ -72,17 +92,28 @@ class UserAccount extends Component {
     return (
       <div className = {classes.background}>
         <div className = {classes.menu}>
-          <Button  fullWidth className = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
-            Profile
-          </Button>
-          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("History")}>
-            History
-          </Button>
-          <Button  fullWidth className = {classes.sideButton} onClick={this.handleChange("RegisterVE")}>
-            Registered VE
-          </Button>
+          <List component="nav">
+          <ListItem button = {classes.sideButton} onClick = {this.handleChange("UserProfile")}>
+          <ListItemIcon>
+          <AssignemntIcon/>
+          </ListItemIcon>
+            <ListItemText primary = "UserProfile"/>
+          </ListItem>
+          <ListItem  fullWidth button = {classes.sideButton} onClick={this.handleChange("History")}>
+          <ListItemIcon>
+          <HistoryIcon/>
+          </ListItemIcon>
+            <ListItemText primary = "History"/>
+          </ListItem>
+          <ListItem  fullWidth button = {classes.sideButton} onClick={this.handleChange("RegisterVE")}>
+          <ListItemIcon>
+          <CarIcon/>
+          </ListItemIcon>
+            <ListItemText primary = "RegisterVE"/>
+          </ListItem>
+          </List>
         </div>
-        <div>
+        <div className = {classes.profile}>
           UserProfile
         </div>
         {currentState}

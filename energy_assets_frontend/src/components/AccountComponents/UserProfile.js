@@ -5,6 +5,12 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import EthereumTradingCard from '../EthereumTradingCard';
 import { Link } from 'react-router-dom';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 
 
@@ -19,6 +25,7 @@ const styles = {
     width: "100%",
     height: "80%",
     position: "absolute",
+    marginRight: "300"
   },
   sideButton: {
     color: "white"
@@ -51,13 +58,12 @@ class UserProfile extends Component {
 
     return (
         <div className = {classes.userProf}>
-          <div>
+          <div className = {classes.menu}>
             <TextField
-              label="Address"
+              label="Addresses"
               className={classes.textField}
               value={this.state.Address}
               margin="normal"
-              variant="outlined"
             />
           </div>
           <div>
@@ -65,8 +71,7 @@ class UserProfile extends Component {
               label="Credit Balance"
               className={classes.textField}
               value={this.state.creditBalance}
-              onChange={this.handleChange('creditBalance')}
-              margin="normal"
+              margin="left"
               variant="outlined"
             />
           </div>

@@ -21,9 +21,14 @@ const styles = {
     position: "absolute",
   },
   sideButton: {
-    color: "white"
+    color: "white",
+    paddingTop: "20px",
+    display: 'flex',
+    alignItems: 'baseline',
+    justifyContent: 'space-evenly'
   },
   button: {
+    width: "10%",
     background: "aqua"
   }
 
@@ -60,8 +65,8 @@ class UserProfile extends Component {
     }
 
     return (
-        <div className = {classes.userProf}>
-          <div>
+        <div className = {classes.Button}>
+          <div className = {classes.sideButton}>
             <TextField
               label="Address"
               className={classes.textField}
@@ -70,17 +75,16 @@ class UserProfile extends Component {
               variant="outlined"
             />
           </div>
-          <div>
+          <div className = {classes.sideButton}>
             <TextField
               label="Credit Balance"
               className={classes.textField}
               value={this.state.creditBalance}
-              onChange={this.handleChange('creditBalance')}
               margin="normal"
               variant="outlined"
             />
           </div>
-          <div>
+          <div className = {classes.sideButton}>
             <TextField
               label="Utility Company"
               className={classes.textField}
@@ -89,26 +93,25 @@ class UserProfile extends Component {
               variant="outlined"
             />
           </div>
-          <div>
+          <div className = {classes.sideButton}>
             <TextField
               label="Ether Balance"
               className={classes.textField}
               value={this.state.etherBalance}
-              onChange={this.handleChange('etherBalance')}
               margin="normal"
               variant="outlined"
             />
           </div>
-        <div>
-          <div>
-            <Button className = {classes.button} color="inherit" component={Link} to="/EthereumTradingCard">
+          <div className = {classes.sideButton}>
+            <Button className = {classes.button} component={Link} to="/EthereumTradingCard">
               Redeem
             </Button>
-            <Button className = {classes.button} color="inherit" component={Link} to="/">
+          </div>
+          <div className = {classes.sideButton}>
+            <Button className = {classes.button}  component={Link} to="/">
               Home
             </Button>
           </div>
-        </div>
       </div>
     );
   }

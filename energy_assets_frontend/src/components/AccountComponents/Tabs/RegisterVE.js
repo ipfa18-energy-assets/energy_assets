@@ -19,10 +19,15 @@ const styles = {
     position: "absolute",
   },
   sideButton: {
-    color: "white"
+    color: "white",
+    paddingTop: "20px",
+    display: 'flex',
+    alignItems: 'baseline',
+    justifyContent: 'space-evenly'
   },
   button: {
-    background: "aqua"
+    background: "aqua",
+    width: "10%"
   }
 
 
@@ -48,7 +53,7 @@ class RegisterVE extends Component {
 
     return (
         <div className = {classes.userProf}>
-          <div>
+          <div className = {classes.sideButton}>
             <TextField
               label="Name"
               className={classes.textField}
@@ -58,7 +63,7 @@ class RegisterVE extends Component {
               variant="outlined"
             />
           </div>
-          <div>
+          <div className = {classes.sideButton}>
             <TextField
               label="Car"
               className={classes.textField}
@@ -67,7 +72,7 @@ class RegisterVE extends Component {
               variant="outlined"
             />
           </div>
-          <div>
+          <div className = {classes.sideButton}>
             <TextField
               label="Car"
               className={classes.textField}
@@ -77,7 +82,7 @@ class RegisterVE extends Component {
             />
           </div>
         <div>
-          <div>
+          <div className = {classes.sideButton}>
             <Button variant="contained" className = {classes.button}>
               Add
             </Button>

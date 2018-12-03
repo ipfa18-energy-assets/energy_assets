@@ -12,7 +12,9 @@ import Paper from '@material-ui/core/Paper';
 
 const styles = {
   history: {
-    float: "left"
+    float: "right",
+    position: "relative",
+    marginleft: "200px"
   }
 
 }

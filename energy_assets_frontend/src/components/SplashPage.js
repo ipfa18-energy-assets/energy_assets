@@ -70,9 +70,6 @@ class SplashPage extends Component {
                     <div className = {classes.tagline}>
                       <font size="8" >Buy Energy More Efficiently</font>
                     </div>
-                    <Button variant="contained">
-                      Create Account
-                    </Button>
                   </div>
                   <div>
                   </div>
