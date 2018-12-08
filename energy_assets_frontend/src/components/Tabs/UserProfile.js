@@ -36,8 +36,8 @@ const styles = {
 class UserProfile extends Component {
   state = {
     address: this.props.address,
-    creditBalance: Number(contract.getCreditBalance({from: this.props.address})),
-    etherBalance: Number(web3.eth.getBalance(this.props.address)),
+    creditBalance: -1,
+    etherBalance: 0,
     utilityCompany: "FF"
   };
 
@@ -49,7 +49,17 @@ class UserProfile extends Component {
 
 
   render() {
-    console.log("Account Balance for " + this.props.address + " is " + Number(contract.getCreditBalance({from: this.props.address})))
+    const self = this
+    console.log(this.state.address)
+    if (Number(this.state.creditBalance) === -1) {
+      contract.getCreditBalance({from: web3.eth.coinbase}, function(error, data) {
+        self.setState({creditBalance: Number(data)})
+      })
+    }
+
+    // web3.eth.getBalance({from: web3.eth.defaultAccount}, function(error, data) {
+    //   self.setState({etherBalance: Number(data)})
+    // })
     const { classes, action, accountType } = this.props;
     const { address } = this.state
 

@@ -14,6 +14,7 @@ import Button from '@material-ui/core/Button';
 import Dropdown from './Dropdown'
 import contract from './BlockchainWrappers/Abi'
 import { Redirect } from 'react-router-dom'
+import web3 from './BlockchainWrappers/Web3';
 
 
 
@@ -81,9 +82,9 @@ class EthereumTradingCard extends Component {
   state = {
     value: 0.1,
     etherAmount: 1,
-    certificateAmount: 1 * Number(contract.getDollarPerUnitOfCharge()),
+    certificateAmount: 9,
     transactionType: this.props.location.state.transaction.action,
-    dollarPerUnitOfCharge: Number(contract.getDollarPerUnitOfCharge()),
+    dollarPerUnitOfCharge: 9,
     address: this.props.location.state.address,
     accountType: this.props.location.state.accountType,
     transactionDone: false
@@ -102,16 +103,27 @@ class EthereumTradingCard extends Component {
   };
 
   handleTransaction = event => {
-    const address = this.state.address
+    const address = web3.eth.coinbase
     const transactionType = this.state.transactionType
     const certificateAmount = this.state.certificateAmount
 
     if (transactionType === "buy") {
-      contract.buy(certificateAmount, {from: address})
+      console.log(certificateAmount)
+      contract.buy(certificateAmount, {from: address}, function (error, data) {
+        console.log("Buy")
+        console.log(data)
+      })
     } else if (transactionType === "sell") {
-      contract.sell(certificateAmount, {from: address})
+      contract.sell(certificateAmount, {from: address}, function (error, data) {
+        console.log("Sell")
+        console.log(data)
+      })
     } else if (transactionType === "redeem") {
-      contract.chargeCompleted(certificateAmount, {from: "0xe6828b402729f6c8ac3c38be82c389af14379d7b"})
+      console.log("Redeem")
+
+      contract.chargeCompleted(certificateAmount, {from: address}, function (error, data) {
+        console.log(data)
+      })
     }
     this.setState({transactionDone: true})
 

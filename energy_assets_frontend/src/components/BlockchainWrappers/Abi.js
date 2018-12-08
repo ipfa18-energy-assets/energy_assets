@@ -169,7 +169,7 @@ let abi = [
 		"constant": false,
 		"inputs": [
 			{
-				"name": "userAddress",
+				"name": "accountAddress",
 				"type": "address"
 			},
 			{
@@ -303,6 +303,25 @@ let abi = [
 	},
 	{
 		"constant": true,
+		"inputs": [
+			{
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "getUserUtilityCompanyOf",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [],
 		"name": "getCreditPerUnitOfCharge",
 		"outputs": [
@@ -338,25 +357,6 @@ let abi = [
 		"constant": true,
 		"inputs": [
 			{
-				"name": "addr",
-				"type": "address"
-			}
-		],
-		"name": "isAuthorizedToVerify",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
 				"name": "user",
 				"type": "address"
 			}
@@ -380,6 +380,20 @@ let abi = [
 			{
 				"name": "",
 				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getUserUtilityCompany",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
 			}
 		],
 		"payable": false,
@@ -595,25 +609,6 @@ let abi = [
 	},
 	{
 		"constant": true,
-		"inputs": [
-			{
-				"name": "user",
-				"type": "address"
-			}
-		],
-		"name": "getUserUtilityCompany",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
 		"inputs": [],
 		"name": "getAddressType",
 		"outputs": [
@@ -638,7 +633,7 @@ let abi = [
 		"type": "fallback"
 	}
 ]
-let address = "0x009f5db8fe4cadd75599d09f0e75872767c09379"
+let address = "0x6334e8f7340861ff6af3d6ed031077c0f99da6ee"
 web3.eth.defaultAccount = web3.eth.coinbase
 let abi_contract = web3.eth.contract(abi)
 let addr_contract = abi_contract.at(address)

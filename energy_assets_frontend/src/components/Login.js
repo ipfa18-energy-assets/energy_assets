@@ -65,17 +65,19 @@ class Login extends Component {
   onSubmit = event => {
     this.setState({error: false})
     const user = this.state.username !== "" ? this.state.username : web3.eth.coinbase
-    const userType = Number(contract.getAddressType({from:user}))
-    console.log("User Type:" + userType)
-    if (userType <= 1) {
-      this.setState({userType: "User"})
-    } else if (userType === 2) {
-      this.setState({userType: "UC"})
-    } else if (userType === 3){
-      this.setState({userType: "FFG"})
-    } else {
-      this.setState({error: true})
-    }
+    const self = this
+    const userType = Number(contract.getAddressType({from:user}, function(error, data) {
+      const userType = Number(data);
+      if (userType <= 1) {
+        self.setState({userType: "User"})
+      } else if (userType === 2) {
+        self.setState({userType: "UC"})
+      } else if (userType === 3){
+        self.setState({userType: "FFG"})
+      } else {
+        self.setState({error: true})
+      }
+    }))
 
   }
 

@@ -46,7 +46,17 @@ class AccountTemplate extends Component {
      });
    };
    deposit100  = () => {
-     contract.etherDeposit({from: this.state.address, gas: 3000000, value: 100})
+     contract.etherDeposit({from: this.state.address, value: 10000000000000000000}, function(error, data) {
+       console.log("ETHER DEPOSIT")
+       console.log(data)
+     })
+     contract.getEtherBalance({from: this.state.address}, function(error, data) {
+       console.log("ETHER BALANCE")
+       console.log(Number(data))
+     })
+     contract.getWeiPerCredit({from: this.state.address}, function(error, data) {
+       console.log(Number(data))
+     })
    }
 
 

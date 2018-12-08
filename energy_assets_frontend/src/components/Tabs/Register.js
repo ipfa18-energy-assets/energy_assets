@@ -37,7 +37,7 @@ class Register extends Component {
     address: "",
     accounType: 0,
     userAddress: "",
-    ucAddress: ""
+    oracleAddress: ""
   };
 
     handleChange = name => event => {
@@ -45,20 +45,28 @@ class Register extends Component {
        [name]: event.target.value,
      });
    };
+   masterAccount = event => {
+     web3.eth.defaultAccount = web3.eth.coinbase
+   }
    RegisterAccount = event => {
-     contract.registration(this.state.address, Number(this.state.accountType))
+     contract.registration(this.state.address, Number(this.state.accountType), {from: web3.eth.coinbase}, function(error, data) {
+       console.log(error, data)
+     })
    }
    ConnectAccount = event => {
-     contract.userRegistration(this.state.userAddress, "0xe6828b402729f6c8ac3c38be82c389af14379d7b", {from: this.state.ucAddress, gas:3000000}) //Random address for oracle because idk, magic number on gas because idk
+     contract.userRegistration(this.state.userAddress, this.state.oracleAddress, {from: web3.eth.coinbase}, function(error, data) {
+       console.log(error, data)
+     }) //Random address for oracle because idk, magic number on gas because idk
    }
    standardRegistration = event => {
-     web3.eth.getAccounts(function(err, result) {
-       contract.registration(result[1], 2)
-       contract.registration(result[2], 2)
-       contract.registration(result[3], 3)
-       contract.registration(result[4], 3)
-       contract.userRegistration(result[5], result[8], {from: result[1], gas:3000000}) //magic number on gas because idk
-       contract.userRegistration(result[6], result[9], {from: result[2], gas:3000000}) //magic number on gas because idk
+     contract.registration("0x5A8d925Ca271F93Ea1A568eA5a7fF5e489EE6Ea8", 2, {from: web3.eth.coinbase}, function(error, data){
+       console.log(data)
+     })
+     contract.registration("0x1EEDa4BB620ac1d65E29319A711B65995848fFE3", 3, {from: web3.eth.coinbase}, function(error, data){
+       console.log(data)
+     })
+     contract.userRegistration("0x377840Bc18fCD3b787F7CFf7E5e0Dc1efF3cC8dE", "0x34bc4FA7F87D7f0f66A0D8cD13a454ABF07E61eE", {from: web3.eth.coinbase}, function(error, data){
+       console.log(data)
      })
    }
 
@@ -111,10 +119,10 @@ class Register extends Component {
           </div>
           <div>
             <TextField
-              label="UC Address"
+              label="Oracle Address"
               className={classes.textField}
-              value={this.state.ucAddress}
-              onChange={this.handleChange('ucAddress')}
+              value={this.state.oracleAddress}
+              onChange={this.handleChange('oracleAddress')}
               margin="normal"
               variant="outlined"
             />
